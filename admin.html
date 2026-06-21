@@ -85,6 +85,30 @@ h1,h2,h3,.topbar h1{font-family:'Reem Kufi',sans-serif}
 .discount-bar .db-field input{width:120px;font-family:inherit;font-size:.95rem;border:1.6px solid #e6d6ad;background:#fff;border-radius:11px;padding:10px 13px}
 .discount-bar .db-field input:focus{outline:none;border-color:var(--gold)}
 .discount-bar .db-hint{font-size:.8rem;color:#94823f;margin-top:10px;font-weight:500}
+/* جدول العمل الأسبوعي */
+.gen-bar{background:var(--gold-soft);border:1px solid #ecdcb4;border-radius:16px;padding:16px 18px;margin-bottom:20px}
+.gen-bar .gb-title{font-weight:900;color:var(--amber);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.gen-bar .gb-title svg{width:19px;height:19px}
+.gen-bar .gb-row{display:flex;gap:12px;align-items:end;flex-wrap:wrap}
+.gen-bar .gb-field label{display:block;font-weight:700;font-size:.82rem;margin-bottom:5px;color:var(--ink)}
+.gen-bar .gb-field input{width:120px;font-family:inherit;font-size:.95rem;border:1.6px solid #e6d6ad;background:#fff;border-radius:11px;padding:10px 13px}
+.gen-bar .gb-field input:focus{outline:none;border-color:var(--gold)}
+.daycard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px;box-shadow:0 6px 18px -14px rgba(8,40,40,.3)}
+.daycard.off{opacity:.7;background:#fafbfb}
+.daycard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.daycard-head .dname{font-family:'Reem Kufi';font-size:1.05rem;color:var(--violet-700);font-weight:700}
+.dswitch{position:relative;width:48px;height:27px;flex:none;cursor:pointer}
+.dswitch input{opacity:0;width:0;height:0}
+.dswitch .dtrack{position:absolute;inset:0;background:#cfd8d8;border-radius:30px;transition:.2s}
+.dswitch .dtrack::before{content:"";position:absolute;width:21px;height:21px;border-radius:50%;background:#fff;top:3px;inset-inline-end:3px;transition:.2s}
+.dswitch input:checked + .dtrack{background:var(--green)}
+.dswitch input:checked + .dtrack::before{inset-inline-end:24px}
+.daycard .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.daycard .chip{background:var(--green-bg);color:var(--violet-700);border:1px solid #cdeee3;border-radius:9px;padding:6px 8px 6px 13px;font-weight:800;font-size:.88rem;display:flex;align-items:center;gap:8px}
+.daycard .chip button{border:0;background:transparent;color:var(--green);font-size:1.1rem;line-height:1;cursor:pointer;padding:0}
+.daycard .addslot{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.daycard .addslot input[type=time]{width:120px;font-family:inherit;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.92rem}
+.daycard .addslot input:focus{outline:none;border-color:var(--green)}
 .ws-card .img .noimg{width:100%;height:100%;display:grid;place-items:center;color:var(--violet-500)}
 .ws-card .img .noimg svg{width:40px;height:40px}
 .ws-card .body{padding:16px 18px;flex:1;display:flex;flex-direction:column}
@@ -216,7 +240,7 @@ tbody tr:last-child td{border-bottom:none}
     <div class="tabs">
       <button class="tab active" data-tab="regs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> المسجّلون <span class="badge" id="bRegs">0</span></button>
       <button class="tab" data-tab="workshops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> الورش <span class="badge" id="bWs">0</span></button>
-      <button class="tab" data-tab="slots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> المواعيد <span class="badge" id="bSlots">0</span></button>
+      <button class="tab" data-tab="slots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> أوقات العمل <span class="badge" id="bSlots">0</span></button>
       <button class="tab" data-tab="bookings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> الحجوزات <span class="badge" id="bBook">0</span></button>
     </div>
 
@@ -250,17 +274,17 @@ tbody tr:last-child td{border-bottom:none}
 
     <!-- المواعيد -->
     <div class="panel" id="p-slots">
-      <div class="section-head"><div><h2>المواعيد المتاحة</h2><p>حدّد الأيام والأوقات التي تكون فيها متاحًا — الأيام بلا مواعيد تُعتبر مشغولة ولا تظهر للمتدرب</p></div></div>
-      <div class="slot-add">
-        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إضافة موعد متاح</h3>
-        <div class="frow">
-          <div class="field"><label>اليوم</label><input type="date" id="sDate"></div>
-          <div class="field"><label>من الساعة</label><input type="time" id="sStart" value="10:00"></div>
-          <div class="field"><label>إلى الساعة</label><input type="time" id="sEnd" value="12:00"></div>
-          <button class="btn btn-green" id="addSlotBtn" style="height:43px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إضافة</button>
+      <div class="section-head"><div><h2>أوقات العمل الأسبوعية</h2><p>حدّد أيام وأوقات العمل مرة واحدة — تُفتح تلقائيًا لكل التواريخ القادمة، ويختفي الوقت متى حجزه متدرب</p></div></div>
+      <div class="gen-bar">
+        <div class="gb-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> توليد سريع للأوقات</div>
+        <div class="gb-row">
+          <div class="gb-field"><label>من</label><input type="time" id="genFrom" value="09:00"></div>
+          <div class="gb-field"><label>إلى</label><input type="time" id="genTo" value="15:00"></div>
+          <div class="gb-field"><label>مدة كل موعد (دقيقة)</label><input type="number" id="genStep" value="120" step="15" min="30"></div>
+          <button class="btn btn-gold btn-sm" onclick="genSlots()">طبّق على الأيام المفعّلة</button>
         </div>
       </div>
-      <div id="slotsArea"></div>
+      <div id="schedArea"></div>
     </div>
 
     <!-- الحجوزات -->
@@ -331,7 +355,8 @@ tbody tr:last-child td{border-bottom:none}
 const SUPABASE_URL = 'https://ajgtatisurcpygzernsy.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_TKQW1nN5DaJg1pH_u2s19Q_9z-8EGWW';
 const BUCKET = 'workshop-images';
-let PASS='', WS=[], SLOTS=[], BOOKINGS=[], REGS=[], editingId=null, pendingImageUrl=null;
+let PASS='', WS=[], SCHED=[], BOOKINGS=[], REGS=[], editingId=null, pendingImageUrl=null;
+const DOW_AR = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 const $ = s=>document.querySelector(s);
 
 async function rpc(fn, body){
@@ -362,15 +387,16 @@ async function login(){
 }
 
 async function loadAll(){
-  [WS, SLOTS, BOOKINGS, REGS] = await Promise.all([
+  [WS, SCHED, BOOKINGS, REGS] = await Promise.all([
     rpc('admin_workshops',{p_pass:PASS}),
-    rpc('admin_slots',{p_pass:PASS}),
+    rpc('admin_get_schedule',{p_pass:PASS}),
     rpc('admin_bookings',{p_pass:PASS}),
     rpc('admin_registrations',{p_pass:PASS})
   ]);
-  $('#bWs').textContent=WS.length; $('#bSlots').textContent=SLOTS.filter(s=>s.status==='available').length;
+  const activeDays = SCHED.filter(d=>d.enabled).length;
+  $('#bWs').textContent=WS.length; $('#bSlots').textContent=activeDays;
   $('#bBook').textContent=BOOKINGS.length; $('#bRegs').textContent=REGS.length;
-  renderWorkshops(); renderSlots(); renderBookings(); renderRegs();
+  renderWorkshops(); renderSchedule(); renderBookings(); renderRegs();
 }
 
 /* تبويبات */
@@ -502,44 +528,68 @@ window.delWs = async (id,title)=>{
   catch(e){ toast('تعذّر الحذف', true); }
 };
 
-/* ═════ المواعيد ═════ */
-$('#sDate').min = new Date().toISOString().slice(0,10);
-$('#sDate').value = new Date().toISOString().slice(0,10);
-$('#addSlotBtn').addEventListener('click', async ()=>{
-  const d=$('#sDate').value, s=$('#sStart').value, e=$('#sEnd').value;
-  if(!d||!s||!e){ toast('يرجى تعبئة اليوم والوقت', true); return; }
-  if(e<=s){ toast('وقت النهاية يجب أن يكون بعد البداية', true); return; }
-  $('#addSlotBtn').disabled=true;
-  try{ await rpc('admin_add_slot',{p_pass:PASS,p_date:d,p_start:s,p_end:e}); await loadAll(); toast('تمت إضافة الموعد ✅'); }
-  catch(err){ toast('تعذّر إضافة الموعد', true); }
-  finally{ $('#addSlotBtn').disabled=false; }
-});
-
-function renderSlots(){
-  const a=$('#slotsArea');
-  if(!SLOTS.length){ a.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><h3>لا توجد مواعيد</h3><p>أضف مواعيدك المتاحة من الأعلى</p></div>`; return; }
-  const byDate={};
-  SLOTS.forEach(s=>{ (byDate[s.slot_date]=byDate[s.slot_date]||[]).push(s); });
-  const dates = Object.keys(byDate).sort();
-  a.innerHTML = dates.map(d=>{
-    const slots=byDate[d]; const avail=slots.filter(s=>s.status==='available').length;
-    return `<div class="daygroup">
-      <div class="dayhead"><span class="dot"></span><h4>${fmtDay(d)}</h4><span class="cnt">(${avail} متاح من ${slots.length})</span></div>
-      <div class="slot-chips">${slots.map(s=>`
-        <div class="slot-chip ${s.status==='booked'?'booked':''}">
-          ${s.status==='booked'?'<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>':''}
-          <span>${esc(s.start_time)} - ${esc(s.end_time)}</span>
-          ${s.status==='available'
-            ? `<span class="x" onclick="delSlot('${s.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>`
-            : '<span style="font-size:.74rem;font-weight:800">محجوز</span>'}
-        </div>`).join('')}</div>
+/* ═════ جدول العمل الأسبوعي ═════ */
+function renderSchedule(){
+  const a=$('#schedArea');
+  a.innerHTML = SCHED.slice().sort((x,y)=>x.weekday-y.weekday).map(day=>{
+    const slots=(day.slots||[]).slice().sort((x,y)=>(x.start||'')<(y.start||'')?-1:1);
+    return `<div class="daycard ${day.enabled?'':'off'}">
+      <div class="daycard-head">
+        <span class="dname">${DOW_AR[day.weekday]}</span>
+        <label class="dswitch">
+          <input type="checkbox" ${day.enabled?'checked':''} onchange="toggleDay(${day.weekday},this.checked)">
+          <span class="dtrack"></span>
+        </label>
+      </div>
+      ${day.enabled?`
+        <div class="chips">
+          ${slots.length?slots.map(s=>`<span class="chip">${esc(s.start)} - ${esc(s.end)}<button onclick="rmSlot(${day.weekday},'${s.start}','${s.end}')">×</button></span>`).join('')
+            :'<span style="color:var(--muted);font-size:.86rem">لا توجد أوقات — أضف وقتًا بالأسفل</span>'}
+        </div>
+        <div class="addslot">
+          <input type="time" id="ns${day.weekday}s" value="09:00">
+          <span style="color:var(--muted)">إلى</span>
+          <input type="time" id="ns${day.weekday}e" value="11:00">
+          <button class="btn btn-ghost btn-sm" onclick="addSlot(${day.weekday})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إضافة وقت</button>
+        </div>`
+      :`<span style="color:var(--muted);font-size:.86rem">يوم معطّل — لا يظهر للحجز</span>`}
     </div>`;
   }).join('');
 }
-window.delSlot = async id=>{
-  if(!confirm('حذف هذا الموعد؟')) return;
-  try{ await rpc('admin_delete_slot',{p_pass:PASS,p_id:id}); await loadAll(); toast('تم حذف الموعد'); }
-  catch(e){ toast('تعذّر الحذف', true); }
+function dayByWeekday(wd){ return SCHED.find(d=>d.weekday===wd); }
+async function saveDay(wd, enabled, slots){
+  await rpc('admin_set_schedule',{p_pass:PASS, p_weekday:wd, p_enabled:enabled, p_slots:slots});
+  await loadAll();
+}
+window.toggleDay = async (wd,on)=>{
+  const day=dayByWeekday(wd);
+  try{ await saveDay(wd, on, day.slots||[]); }catch(e){ toast('تعذّر التحديث', true); }
+};
+window.addSlot = async wd=>{
+  const s=$('#ns'+wd+'s').value, e=$('#ns'+wd+'e').value;
+  if(!s||!e){ toast('حدّد وقت البداية والنهاية', true); return; }
+  if(e<=s){ toast('وقت النهاية يجب أن يكون بعد البداية', true); return; }
+  const day=dayByWeekday(wd); const slots=(day.slots||[]).slice();
+  if(slots.some(x=>x.start===s&&x.end===e)){ toast('هذا الوقت مضاف مسبقًا', true); return; }
+  slots.push({start:s,end:e});
+  try{ await saveDay(wd, true, slots); toast('تمت إضافة الوقت ✅'); }catch(_){ toast('تعذّر الحفظ', true); }
+};
+window.rmSlot = async (wd,s,e)=>{
+  const day=dayByWeekday(wd); const slots=(day.slots||[]).filter(x=>!(x.start===s&&x.end===e));
+  try{ await saveDay(wd, day.enabled, slots); }catch(_){ toast('تعذّر الحذف', true); }
+};
+window.genSlots = async ()=>{
+  const from=$('#genFrom').value, to=$('#genTo').value, step=Number($('#genStep').value)||120;
+  if(!from||!to||to<=from){ toast('تحقق من وقت البداية والنهاية', true); return; }
+  const toMin=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
+  const pad=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+  const out=[]; for(let m=toMin(from); m+step<=toMin(to); m+=step) out.push({start:pad(m),end:pad(m+step)});
+  if(!out.length){ toast('المدة أكبر من الفترة المحددة', true); return; }
+  if(!confirm(`سيتم استبدال أوقات كل الأيام المفعّلة بـ ${out.length} موعدًا. متابعة؟`)) return;
+  try{
+    for(const day of SCHED){ if(day.enabled) await rpc('admin_set_schedule',{p_pass:PASS,p_weekday:day.weekday,p_enabled:true,p_slots:out}); }
+    await loadAll(); toast('تم توليد الأوقات ✅');
+  }catch(e){ toast('تعذّر التوليد', true); }
 };
 
 /* ═════ الحجوزات ═════ */
