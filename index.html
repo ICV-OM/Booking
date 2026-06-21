@@ -204,6 +204,16 @@ let bk=null; /* {ws, month, date, slotId} */
 const $=s=>document.querySelector(s);
 function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function money(v){ return Number(v)+' ر.ع'; }
+function priceTagHtml(w){
+  const p=Number(w.price_omr), d=Number(w.discount_percent)||0;
+  if(d>0){ const np=+(p*(1-d/100)).toFixed(2); return `<span class="price-tag"><s style="opacity:.65;font-weight:600">${p}</s> ${np} ر.ع</span>`; }
+  return `<span class="price-tag">${money(p)}</span>`;
+}
+function priceLine(w){
+  const p=Number(w.price_omr), d=Number(w.discount_percent)||0;
+  if(d>0){ const np=+(p*(1-d/100)).toFixed(2); return `<s style="opacity:.6">${p}</s> ${np} ر.ع <span style="color:var(--gold);font-weight:800">· خصم ${d}%</span>`; }
+  return money(p);
+}
 function todayStr(){ return new Date().toISOString().slice(0,10); }
 function fmtDay(s){ return new Date(s+'T00:00:00').toLocaleDateString('ar',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
 function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; $('#toastMount').appendChild(t); setTimeout(()=>t.remove(),2600); }
@@ -230,7 +240,7 @@ function renderPublic(){
     <div class="card">
       <div class="thumb">
         ${w.image_url?`<img src="${esc(w.image_url)}" alt="">`:`<div class="ph">🖼️</div>`}
-        <span class="price-tag">${money(w.price_omr)}</span>
+        ${priceTagHtml(w)}
       </div>
       <div class="card-body">
         <h3>${esc(w.title)}</h3>
@@ -268,7 +278,7 @@ function renderBkBody(){
   $('#bkBody').innerHTML=`
     <div class="ws-strip">
       <div class="pic" style="${w.image_url?`background-image:url('${esc(w.image_url)}')`:''}">${w.image_url?'':'🖼️'}</div>
-      <div><b>${esc(w.title)}</b><div class="sub">${money(w.price_omr)}${w.duration?' · '+esc(w.duration):''}</div></div>
+      <div><b>${esc(w.title)}</b><div class="sub">${priceLine(w)}${w.duration?' · '+esc(w.duration):''}</div></div>
     </div>
     <div id="calMount"></div>
     <div id="slotMount" style="margin-top:16px"></div>
