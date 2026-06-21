@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة إدارة الورش التدريبية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --violet-900:#3b0f7e;--violet-700:#5b21b6;--violet-600:#6d28d9;--violet-500:#7c3aed;
+  --violet-100:#ede9fe;--violet-50:#f5f3ff;--ink:#1e1b34;--muted:#6b6788;
+  --line:#e4e0f4;--white:#fff;--green:#128c4b;--green-bg:#e8f7ee;--red:#b3261e;--amber:#b5730e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--violet-50);color:var(--ink);min-height:100vh}
+.btn{font-family:inherit;font-weight:800;font-size:.9rem;cursor:pointer;border:none;border-radius:12px;
+  padding:10px 18px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:disabled{opacity:.6;cursor:default}
+.btn svg{width:17px;height:17px}
+.btn-violet{background:var(--violet-600);color:#fff}.btn-violet:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 18px -8px rgba(109,40,217,.5)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover:not(:disabled){transform:translateY(-1px)}
+.btn-light{background:rgba(255,255,255,.16);color:#fff}.btn-light:hover{background:rgba(255,255,255,.26)}
+.btn-ghost{background:var(--violet-50);color:var(--violet-700);border:1.4px solid var(--line)}
+.btn-ghost:hover{background:var(--violet-100)}
+.btn-danger{background:#fdeceb;color:var(--red)}.btn-danger:hover{background:#fbdad8}
+.btn-sm{padding:7px 13px;font-size:.82rem;border-radius:10px}
+
+.topbar{background:linear-gradient(135deg,var(--violet-900),var(--violet-600));color:#fff;
+  padding:18px 26px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 24px -12px rgba(91,33,182,.5)}
+.topbar .logo{width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.16);display:grid;place-items:center}
+.topbar .logo svg{width:24px;height:24px}
+.topbar h1{font-size:1.15rem;font-weight:900}
+.topbar p{font-size:.82rem;color:#e0d8ff;font-weight:500}
+.topbar .right{margin-inline-start:auto;display:flex;gap:10px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 70px}
+.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.tab{font-family:inherit;font-weight:800;font-size:.95rem;cursor:pointer;border:none;background:#fff;
+  border:1.4px solid var(--line);color:var(--muted);border-radius:13px;padding:11px 20px;display:flex;align-items:center;gap:8px}
+.tab svg{width:18px;height:18px}
+.tab.active{background:var(--violet-600);color:#fff;border-color:var(--violet-600)}
+.tab .badge{background:var(--violet-100);color:var(--violet-700);font-size:.74rem;padding:1px 8px;border-radius:999px;font-weight:900}
+.tab.active .badge{background:rgba(255,255,255,.22);color:#fff}
+
+.panel{display:none}.panel.active{display:block}
+
+/* ── شاشة الدخول ── */
+.gate{max-width:400px;margin:9vh auto;background:#fff;border-radius:24px;padding:38px 32px;
+  box-shadow:0 18px 50px -20px rgba(30,27,52,.25);text-align:center}
+.gate .ring{width:74px;height:74px;border-radius:50%;margin:0 auto 18px;
+  background:linear-gradient(135deg,var(--violet-700),var(--violet-500));display:grid;place-items:center}
+.gate .ring svg{width:34px;height:34px;color:#fff}
+.gate h2{font-size:1.4rem;font-weight:900;margin-bottom:6px}
+.gate p{color:var(--muted);font-size:.9rem;margin-bottom:22px}
+.gate input{width:100%;font-family:inherit;font-size:1rem;text-align:center;letter-spacing:2px;
+  border:1.6px solid var(--line);background:var(--violet-50);border-radius:14px;padding:14px;margin-bottom:14px}
+.gate input:focus{outline:none;border-color:var(--violet-500);background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.14)}
+.gate .btn{width:100%;justify-content:center;font-size:1.05rem;padding:14px}
+.gate .err{color:var(--red);font-size:.86rem;font-weight:700;margin-bottom:12px;min-height:18px}
+
+/* ── الورش ── */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.section-head h2{font-size:1.3rem;font-weight:900}
+.section-head p{font-size:.88rem;color:var(--muted)}
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.ws-card{background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden;
+  box-shadow:0 8px 24px -16px rgba(30,27,52,.18);display:flex;flex-direction:column}
+.ws-card .img{height:150px;background:var(--violet-100);background-size:cover;background-position:center;position:relative}
+.ws-card .img .off{position:absolute;inset:0;background:rgba(30,27,52,.55);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.9rem}
+.ws-card .img .noimg{width:100%;height:100%;display:grid;place-items:center;color:var(--violet-500)}
+.ws-card .img .noimg svg{width:40px;height:40px}
+.ws-card .body{padding:16px 18px;flex:1;display:flex;flex-direction:column}
+.ws-card h3{font-size:1.08rem;font-weight:900;margin-bottom:6px}
+.ws-card .desc{font-size:.86rem;color:var(--muted);line-height:1.7;flex:1;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ws-card .meta{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+.ws-card .actions{display:flex;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.ws-card .actions .btn{flex:1;justify-content:center}
+.pill{display:inline-block;padding:3px 11px;border-radius:999px;font-size:.78rem;font-weight:800;white-space:nowrap}
+.pill-violet{background:var(--violet-100);color:var(--violet-700)}
+.pill-green{background:var(--green-bg);color:var(--green)}
+.pill-amber{background:#fdf3e3;color:var(--amber)}
+.pill-gray{background:#eee;color:#777}
+
+/* ── المواعيد ── */
+.slot-add{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:20px}
+.slot-add h3{font-size:1.05rem;font-weight:900;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.slot-add h3 svg{width:20px;height:20px;color:var(--violet-600)}
+.frow{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
+.field{flex:1;min-width:140px}
+.field label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px}
+.field input{width:100%;font-family:inherit;font-size:.95rem;border:1.6px solid var(--line);
+  background:var(--violet-50);border-radius:12px;padding:11px 14px}
+.field input:focus{outline:none;border-color:var(--violet-500);background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.12)}
+.daygroup{margin-bottom:22px}
+.daygroup .dayhead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.daygroup .dayhead .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+.daygroup .dayhead h4{font-size:1rem;font-weight:900}
+.daygroup .dayhead .cnt{font-size:.82rem;color:var(--muted);font-weight:600}
+.slot-chips{display:flex;gap:10px;flex-wrap:wrap}
+.slot-chip{display:flex;align-items:center;gap:10px;background:#fff;border:1.4px solid var(--line);
+  border-radius:12px;padding:9px 14px;font-weight:800;font-size:.9rem}
+.slot-chip.booked{background:#fdf3e3;border-color:#f0d9ab;color:var(--amber)}
+.slot-chip .x{cursor:pointer;color:var(--muted);display:grid;place-items:center;width:20px;height:20px;border-radius:6px}
+.slot-chip .x:hover{background:#fdeceb;color:var(--red)}
+.slot-chip .x svg{width:13px;height:13px}
+.slot-chip .lock{width:14px;height:14px;color:var(--amber)}
+
+/* ── الحجوزات ── */
+.tablecard{background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden;box-shadow:0 8px 24px -16px rgba(30,27,52,.18)}
+.tablescroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:760px}
+thead th{background:var(--violet-50);color:var(--violet-900);font-weight:800;text-align:right;padding:13px 16px;white-space:nowrap;border-bottom:2px solid var(--line)}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--line)}
+tbody tr:hover{background:var(--violet-50)}
+tbody tr:last-child td{border-bottom:none}
+.cell-contact{direction:ltr;text-align:right;color:var(--muted);font-size:.84rem}
+
+/* ── نافذة منبثقة ── */
+.modal-bg{position:fixed;inset:0;background:rgba(30,27,52,.5);display:none;align-items:flex-start;justify-content:center;
+  padding:30px 16px;z-index:50;overflow-y:auto}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:22px;max-width:520px;width:100%;padding:28px;box-shadow:0 24px 60px -20px rgba(0,0,0,.4)}
+.modal h3{font-size:1.25rem;font-weight:900;margin-bottom:20px}
+.modal .field{margin-bottom:16px;min-width:0}
+.modal textarea{width:100%;font-family:inherit;font-size:.95rem;border:1.6px solid var(--line);
+  background:var(--violet-50);border-radius:12px;padding:11px 14px;min-height:80px;resize:vertical}
+.modal textarea:focus{outline:none;border-color:var(--violet-500);background:#fff}
+.modal .imgprev{height:120px;border-radius:12px;background:var(--violet-50);border:1.6px dashed var(--line);
+  display:grid;place-items:center;color:var(--muted);background-size:cover;background-position:center;margin-bottom:10px;overflow:hidden}
+.switch{display:flex;align-items:center;gap:10px;font-weight:700}
+.switch input{width:auto}
+.modal-actions{display:flex;gap:10px;margin-top:8px}
+.modal-actions .btn{flex:1;justify-content:center}
+
+.empty{padding:54px 20px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:18px}
+.empty svg{width:50px;height:50px;color:var(--line);margin-bottom:12px}
+.empty h3{font-size:1.1rem;font-weight:800;color:var(--ink);margin-bottom:4px}
+.loading{text-align:center;padding:50px;color:var(--muted);font-weight:700}
+.spin{width:32px;height:32px;border:3px solid var(--violet-100);border-top-color:var(--violet-600);border-radius:50%;animation:r .8s linear infinite;margin:0 auto 14px}
+@keyframes r{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+/* ── إحصائيات وأدوات المسجّلين ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
+.stat{background:#fff;border-radius:18px;padding:18px 20px;border:1px solid var(--line);box-shadow:0 6px 18px -14px rgba(30,27,52,.2)}
+.stat .lbl{font-size:.84rem;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:7px}
+.stat .lbl svg{width:16px;height:16px;color:var(--violet-600)}
+.stat .val{font-size:1.8rem;font-weight:900;margin-top:6px;color:var(--violet-900)}
+.stat .val small{font-size:.85rem;font-weight:700;color:var(--muted)}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.search{flex:1;min-width:220px;position:relative}
+.search input{width:100%;font-family:inherit;font-size:.95rem;border:1.6px solid var(--line);background:#fff;border-radius:13px;padding:12px 44px 12px 16px}
+.search input:focus{outline:none;border-color:var(--violet-500);box-shadow:0 0 0 4px rgba(124,58,237,.12)}
+.search svg{position:absolute;right:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.filter{font-family:inherit;font-size:.92rem;font-weight:600;border:1.6px solid var(--line);background:#fff;border-radius:13px;padding:12px 16px;cursor:pointer}
+.filter:focus{outline:none;border-color:var(--violet-500)}
+.count-note{font-size:.85rem;color:var(--muted);margin:14px 2px 0;font-weight:600}
+.idx{color:var(--muted);font-weight:700;font-size:.82rem}
+.cell-name{font-weight:800;color:var(--ink)}
+.empty2{padding:60px 20px;text-align:center;color:var(--muted)}
+.empty2 svg{width:54px;height:54px;color:var(--line);margin-bottom:12px}
+.empty2 h3{font-size:1.1rem;font-weight:800;color:var(--ink);margin-bottom:4px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:14px 22px;border-radius:14px;
+  font-weight:700;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);z-index:90;opacity:0;transform:translateY(20px);
+  transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.err{background:var(--red)}
+@media (max-width:560px){.topbar{flex-wrap:wrap}.topbar .right{width:100%;margin:0}.topbar .right .btn{flex:1;justify-content:center}}
+</style>
+</head>
+<body>
+
+<!-- شاشة الدخول -->
+<div id="gate" class="gate">
+  <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+  <h2>لوحة إدارة الورش</h2>
+  <p>أدخل كلمة المرور لإدارة المسجّلين والورش والحجوزات</p>
+  <div class="err" id="gateErr"></div>
+  <input type="password" id="pass" placeholder="كلمة المرور" autocomplete="current-password">
+  <button class="btn btn-violet" id="loginBtn">دخول</button>
+</div>
+
+<!-- اللوحة -->
+<div id="app" class="hidden">
+  <div class="topbar">
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
+    <div><h1>لوحة إدارة الورش التدريبية</h1><p>المسجّلون · الورش · المواعيد · الحجوزات</p></div>
+    <div class="right">
+      <a class="btn btn-light" id="viewPublic" href="index.html" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> صفحة الحجز</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="tabs">
+      <button class="tab active" data-tab="regs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> المسجّلون <span class="badge" id="bRegs">0</span></button>
+      <button class="tab" data-tab="workshops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> الورش <span class="badge" id="bWs">0</span></button>
+      <button class="tab" data-tab="slots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> المواعيد <span class="badge" id="bSlots">0</span></button>
+      <button class="tab" data-tab="bookings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> الحجوزات <span class="badge" id="bBook">0</span></button>
+    </div>
+
+    <!-- المسجّلون -->
+    <div class="panel active" id="p-regs">
+      <div class="section-head">
+        <div><h2>المسجّلون في النموذج</h2><p>المتدربون الذين سجّلوا عبر نموذج التسجيل في الورشة</p></div>
+        <button class="btn btn-green" id="exportRegsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> تصدير Excel</button>
+      </div>
+      <div class="stats" id="regStats"></div>
+      <div class="toolbar">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="rSearch" placeholder="ابحث بالاسم أو الهاتف أو البريد…">
+        </div>
+        <select class="filter" id="rMode"><option value="">كل أنواع التدريب</option><option>حضوري</option><option>أونلاين</option></select>
+        <select class="filter" id="rStatus"><option value="">كل الحالات</option><option>طالب</option><option>موظف</option><option>باحث عن عمل</option></select>
+      </div>
+      <div class="tablecard"><div id="regTableArea" class="tablescroll"></div></div>
+      <p class="count-note" id="rCount"></p>
+    </div>
+
+    <!-- الورش -->
+    <div class="panel" id="p-workshops">
+      <div class="section-head">
+        <div><h2>الورش التدريبية</h2><p>أضف صورة الورشة ومعلوماتها وسعرها — تظهر للمتدربين في صفحة الحجز</p></div>
+        <button class="btn btn-violet" id="addWsBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> ورشة جديدة</button>
+      </div>
+      <div id="wsArea"></div>
+    </div>
+
+    <!-- المواعيد -->
+    <div class="panel" id="p-slots">
+      <div class="section-head"><div><h2>المواعيد المتاحة</h2><p>حدّد الأيام والأوقات التي تكون فيها متاحًا — الأيام بلا مواعيد تُعتبر مشغولة ولا تظهر للمتدرب</p></div></div>
+      <div class="slot-add">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إضافة موعد متاح</h3>
+        <div class="frow">
+          <div class="field"><label>اليوم</label><input type="date" id="sDate"></div>
+          <div class="field"><label>من الساعة</label><input type="time" id="sStart" value="10:00"></div>
+          <div class="field"><label>إلى الساعة</label><input type="time" id="sEnd" value="12:00"></div>
+          <button class="btn btn-green" id="addSlotBtn" style="height:43px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> إضافة</button>
+        </div>
+      </div>
+      <div id="slotsArea"></div>
+    </div>
+
+    <!-- الحجوزات -->
+    <div class="panel" id="p-bookings">
+      <div class="section-head">
+        <div><h2>الحجوزات</h2><p>المواعيد التي حجزها المتدربون</p></div>
+        <button class="btn btn-green" id="exportBookBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg> تصدير Excel</button>
+      </div>
+      <div id="bookArea"></div>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة الورشة -->
+<div class="modal-bg" id="wsModal">
+  <div class="modal">
+    <h3 id="wsModalTitle">ورشة جديدة</h3>
+    <div class="imgprev" id="imgPrev"><span id="imgPrevTxt">لا توجد صورة</span></div>
+    <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">صورة الورشة</label>
+      <input type="file" id="wsImg" accept="image/*" style="width:100%;font-family:inherit;font-size:.85rem"></div>
+    <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">عنوان الورشة</label>
+      <input type="text" id="wsTitle" placeholder="مثال: صناعة الفيديوهات بالذكاء الاصطناعي"></div>
+    <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">الوصف</label>
+      <textarea id="wsDesc" placeholder="نبذة عن الورشة ومحاورها"></textarea></div>
+    <div class="frow" style="margin-bottom:16px">
+      <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">السعر (ريال عماني)</label>
+        <input type="number" id="wsPrice" min="0" step="1" placeholder="50"></div>
+      <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">المدة</label>
+        <input type="text" id="wsDuration" placeholder="مثال: ٣ ساعات"></div>
+    </div>
+    <label class="switch" style="margin-bottom:18px"><input type="checkbox" id="wsActive" checked> الورشة مفعّلة (تظهر للمتدربين)</label>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="wsCancel">إلغاء</button>
+      <button class="btn btn-violet" id="wsSave">حفظ الورشة</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://ajgtatisurcpygzernsy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_TKQW1nN5DaJg1pH_u2s19Q_9z-8EGWW';
+const BUCKET = 'workshop-images';
+let PASS='', WS=[], SLOTS=[], BOOKINGS=[], REGS=[], editingId=null, pendingImageUrl=null;
+const $ = s=>document.querySelector(s);
+
+async function rpc(fn, body){
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`,{method:'POST',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json'},
+    body:JSON.stringify(body)});
+  const data = await r.json();
+  if(!r.ok) throw new Error(data.message||'تعذّر الاتصال');
+  return data;
+}
+function toast(msg, err){ const t=$('#toast'); t.textContent=msg; t.className='toast show'+(err?' err':''); setTimeout(()=>t.className='toast',2600); }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* دخول */
+$('#loginBtn').addEventListener('click', login);
+$('#pass').addEventListener('keydown', e=>{ if(e.key==='Enter') login(); });
+async function login(){
+  const p=$('#pass').value.trim();
+  if(!p){ $('#gateErr').textContent='يرجى إدخال كلمة المرور'; return; }
+  $('#loginBtn').disabled=true; $('#loginBtn').textContent='جارٍ التحقق…'; $('#gateErr').textContent='';
+  try{
+    PASS=p;
+    await loadAll();
+    $('#gate').classList.add('hidden'); $('#app').classList.remove('hidden');
+  }catch(err){
+    $('#gateErr').textContent = err.message.includes('كلمة')?'كلمة المرور غير صحيحة':'تعذّر الاتصال بالخادم'; PASS='';
+  }finally{ $('#loginBtn').disabled=false; $('#loginBtn').textContent='دخول'; }
+}
+
+async function loadAll(){
+  [WS, SLOTS, BOOKINGS, REGS] = await Promise.all([
+    rpc('admin_workshops',{p_pass:PASS}),
+    rpc('admin_slots',{p_pass:PASS}),
+    rpc('admin_bookings',{p_pass:PASS}),
+    rpc('admin_registrations',{p_pass:PASS})
+  ]);
+  $('#bWs').textContent=WS.length; $('#bSlots').textContent=SLOTS.filter(s=>s.status==='available').length;
+  $('#bBook').textContent=BOOKINGS.length; $('#bRegs').textContent=REGS.length;
+  renderWorkshops(); renderSlots(); renderBookings(); renderRegs();
+}
+
+/* تبويبات */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active'); $('#p-'+t.dataset.tab).classList.add('active');
+}));
+
+/* ═════ الورش ═════ */
+function renderWorkshops(){
+  const a=$('#wsArea');
+  if(!WS.length){ a.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><h3>لا توجد ورش بعد</h3><p>اضغط «ورشة جديدة» لإضافة أول ورشة</p></div>`; return; }
+  a.innerHTML = `<div class="ws-grid">${WS.map(w=>`
+    <div class="ws-card">
+      <div class="img" style="${w.image_url?`background-image:url('${esc(w.image_url)}')`:''}">
+        ${!w.image_url?`<div class="noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>`:''}
+        ${!w.is_active?'<div class="off">غير مفعّلة</div>':''}
+      </div>
+      <div class="body">
+        <h3>${esc(w.title)}</h3>
+        <p class="desc">${esc(w.description||'—')}</p>
+        <div class="meta">
+          <span class="pill pill-violet">${Number(w.price_omr)} ر.ع</span>
+          ${w.duration?`<span class="pill pill-gray">${esc(w.duration)}</span>`:''}
+          <span class="pill ${w.is_active?'pill-green':'pill-gray'}">${w.is_active?'مفعّلة':'متوقفة'}</span>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost btn-sm" onclick="editWs('${w.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg> تعديل</button>
+          <button class="btn btn-danger btn-sm" onclick="delWs('${w.id}','${esc(w.title)}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
+        </div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+$('#addWsBtn').addEventListener('click', ()=>openWsModal(null));
+window.editWs = id=>openWsModal(WS.find(w=>w.id===id));
+function openWsModal(w){
+  editingId = w?w.id:null; pendingImageUrl = w?w.image_url:null;
+  $('#wsModalTitle').textContent = w?'تعديل الورشة':'ورشة جديدة';
+  $('#wsTitle').value = w?w.title:''; $('#wsDesc').value = w?(w.description||''):'';
+  $('#wsPrice').value = w?w.price_omr:''; $('#wsDuration').value = w?(w.duration||''):'';
+  $('#wsActive').checked = w?w.is_active:true; $('#wsImg').value='';
+  setPreview(pendingImageUrl);
+  $('#wsModal').classList.add('show');
+}
+function setPreview(url){
+  const pv=$('#imgPrev');
+  if(url){ pv.style.backgroundImage=`url('${url}')`; $('#imgPrevTxt').textContent=''; }
+  else { pv.style.backgroundImage=''; $('#imgPrevTxt').textContent='لا توجد صورة'; }
+}
+$('#wsCancel').addEventListener('click', ()=>$('#wsModal').classList.remove('show'));
+$('#wsModal').addEventListener('click', e=>{ if(e.target.id==='wsModal') $('#wsModal').classList.remove('show'); });
+
+/* رفع الصورة إلى Supabase Storage */
+$('#wsImg').addEventListener('change', async e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const localUrl = URL.createObjectURL(file); setPreview(localUrl);
+  toast('جارٍ رفع الصورة…');
+  try{
+    const ext = file.name.split('.').pop();
+    const path = `ws_${Date.now()}.${ext}`;
+    const up = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':file.type},
+      body:file
+    });
+    if(!up.ok) throw new Error();
+    pendingImageUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+    toast('تم رفع الصورة ✅');
+  }catch(_){ toast('تعذّر رفع الصورة', true); }
+});
+
+$('#wsSave').addEventListener('click', async ()=>{
+  const title=$('#wsTitle').value.trim();
+  if(!title){ toast('يرجى إدخال عنوان الورشة', true); return; }
+  $('#wsSave').disabled=true; $('#wsSave').textContent='جارٍ الحفظ…';
+  try{
+    await rpc('admin_save_workshop',{
+      p_pass:PASS, p_id:editingId, p_title:title, p_desc:$('#wsDesc').value.trim(),
+      p_price:Number($('#wsPrice').value)||0, p_duration:$('#wsDuration').value.trim(),
+      p_image:pendingImageUrl, p_active:$('#wsActive').checked
+    });
+    $('#wsModal').classList.remove('show'); await loadAll(); toast('تم حفظ الورشة ✅');
+  }catch(e){ toast('تعذّر الحفظ', true); }
+  finally{ $('#wsSave').disabled=false; $('#wsSave').textContent='حفظ الورشة'; }
+});
+
+window.delWs = async (id,title)=>{
+  if(!confirm(`حذف الورشة «${title}»؟`)) return;
+  try{ await rpc('admin_delete_workshop',{p_pass:PASS,p_id:id}); await loadAll(); toast('تم حذف الورشة'); }
+  catch(e){ toast('تعذّر الحذف', true); }
+};
+
+/* ═════ المواعيد ═════ */
+$('#sDate').min = new Date().toISOString().slice(0,10);
+$('#sDate').value = new Date().toISOString().slice(0,10);
+$('#addSlotBtn').addEventListener('click', async ()=>{
+  const d=$('#sDate').value, s=$('#sStart').value, e=$('#sEnd').value;
+  if(!d||!s||!e){ toast('يرجى تعبئة اليوم والوقت', true); return; }
+  if(e<=s){ toast('وقت النهاية يجب أن يكون بعد البداية', true); return; }
+  $('#addSlotBtn').disabled=true;
+  try{ await rpc('admin_add_slot',{p_pass:PASS,p_date:d,p_start:s,p_end:e}); await loadAll(); toast('تمت إضافة الموعد ✅'); }
+  catch(err){ toast('تعذّر إضافة الموعد', true); }
+  finally{ $('#addSlotBtn').disabled=false; }
+});
+
+function renderSlots(){
+  const a=$('#slotsArea');
+  if(!SLOTS.length){ a.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><h3>لا توجد مواعيد</h3><p>أضف مواعيدك المتاحة من الأعلى</p></div>`; return; }
+  const byDate={};
+  SLOTS.forEach(s=>{ (byDate[s.slot_date]=byDate[s.slot_date]||[]).push(s); });
+  const dates = Object.keys(byDate).sort();
+  a.innerHTML = dates.map(d=>{
+    const slots=byDate[d]; const avail=slots.filter(s=>s.status==='available').length;
+    return `<div class="daygroup">
+      <div class="dayhead"><span class="dot"></span><h4>${fmtDay(d)}</h4><span class="cnt">(${avail} متاح من ${slots.length})</span></div>
+      <div class="slot-chips">${slots.map(s=>`
+        <div class="slot-chip ${s.status==='booked'?'booked':''}">
+          ${s.status==='booked'?'<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>':''}
+          <span>${esc(s.start_time)} - ${esc(s.end_time)}</span>
+          ${s.status==='available'
+            ? `<span class="x" onclick="delSlot('${s.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span>`
+            : '<span style="font-size:.74rem;font-weight:800">محجوز</span>'}
+        </div>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+window.delSlot = async id=>{
+  if(!confirm('حذف هذا الموعد؟')) return;
+  try{ await rpc('admin_delete_slot',{p_pass:PASS,p_id:id}); await loadAll(); toast('تم حذف الموعد'); }
+  catch(e){ toast('تعذّر الحذف', true); }
+};
+
+/* ═════ الحجوزات ═════ */
+function renderBookings(){
+  const a=$('#bookArea');
+  if(!BOOKINGS.length){ a.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><h3>لا توجد حجوزات بعد</h3><p>ستظهر هنا حجوزات المتدربين</p></div>`; return; }
+  a.innerHTML=`<div class="tablecard"><div class="tablescroll"><table>
+    <thead><tr><th>#</th><th>المتدرب</th><th>الهاتف</th><th>البريد</th><th>الورشة</th><th>اليوم</th><th>الوقت</th><th>الطلبات</th></tr></thead>
+    <tbody>${BOOKINGS.map((b,i)=>`<tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td style="font-weight:800">${esc(b.trainee_name)}</td>
+      <td class="cell-contact">${esc(b.trainee_phone)}</td>
+      <td class="cell-contact">${esc(b.trainee_email||'—')}</td>
+      <td>${esc(b.workshop_title||'—')}</td>
+      <td style="white-space:nowrap">${b.slot_date?fmtDay(b.slot_date):'—'}</td>
+      <td style="white-space:nowrap">${esc(b.slot_time||'—')}</td>
+      <td style="color:var(--muted);font-size:.84rem;max-width:180px">${esc(b.notes||'—')}</td>
+    </tr>`).join('')}</tbody></table></div></div>`;
+}
+
+$('#exportBookBtn').addEventListener('click', ()=>{
+  if(!BOOKINGS.length){ toast('لا توجد حجوزات للتصدير', true); return; }
+  const data = BOOKINGS.map((b,i)=>({
+    '#':i+1,'المتدرب':b.trainee_name,'رقم الهاتف':b.trainee_phone,'البريد':b.trainee_email||'',
+    'الورشة':b.workshop_title||'','اليوم':b.slot_date||'','الوقت':b.slot_time||'',
+    'الطلبات':b.notes||'','تاريخ الحجز':new Date(b.created_at).toLocaleString('ar')
+  }));
+  const ws=XLSX.utils.json_to_sheet(data);
+  ws['!cols']=[{wch:5},{wch:22},{wch:15},{wch:24},{wch:24},{wch:14},{wch:16},{wch:24},{wch:20}];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'الحجوزات');
+  XLSX.writeFile(wb,`حجوزات_${new Date().toISOString().slice(0,10)}.xlsx`);
+});
+
+function fmtDay(d){
+  return new Date(d+'T00:00:00').toLocaleDateString('ar',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+function fmtDateTime(s){
+  const d=new Date(s);
+  return d.toLocaleDateString('ar',{year:'numeric',month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'});
+}
+
+/* ═════ المسجّلون ═════ */
+function renderRegs(){
+  renderRegStats(); renderRegTable();
+}
+function renderRegStats(){
+  const total=REGS.length;
+  const present=REGS.filter(r=>r.training_mode==='حضوري').length;
+  const online=REGS.filter(r=>r.training_mode==='أونلاين').length;
+  const revenue=REGS.reduce((s,r)=>s+(Number(r.price_omr)||0),0);
+  const cards=[
+    ['إجمالي المسجّلين',total,'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'],
+    ['حضوري',present,'<path d="M3 21h18M5 21V7l7-4 7 4v14"/>'],
+    ['أونلاين',online,'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/>'],
+    ['إجمالي الرسوم',revenue+' <small>ر.ع</small>','<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'],
+  ];
+  $('#regStats').innerHTML=cards.map(([l,v,ic])=>`<div class="stat"><div class="lbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ic}</svg>${l}</div><div class="val">${v}</div></div>`).join('');
+}
+function regsFiltered(){
+  const q=$('#rSearch').value.trim().toLowerCase(), m=$('#rMode').value, st=$('#rStatus').value;
+  return REGS.filter(r=>{
+    if(m&&r.training_mode!==m) return false;
+    if(st&&r.status!==st) return false;
+    if(q){ const hay=`${r.full_name} ${r.phone||''} ${r.email||''} ${r.governorate}`.toLowerCase(); if(!hay.includes(q)) return false; }
+    return true;
+  });
+}
+function renderRegTable(){
+  const rows=regsFiltered(), area=$('#regTableArea');
+  if(!rows.length){ area.innerHTML=`<div class="empty2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><h3>لا توجد نتائج</h3><p>جرّب تعديل البحث أو التصفية</p></div>`; $('#rCount').textContent=''; return; }
+  area.innerHTML=`<table><thead><tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>البريد</th><th>النوع</th><th>المحافظة</th><th>الحالة</th><th>التدريب</th><th>الرسوم</th><th>التاريخ</th><th>الطلبات</th></tr></thead><tbody>${rows.map((r,i)=>`<tr>
+      <td class="idx">${i+1}</td><td class="cell-name">${esc(r.full_name)}</td>
+      <td class="cell-contact">${esc(r.phone||'—')}</td><td class="cell-contact">${esc(r.email||'—')}</td>
+      <td>${esc(r.gender)}</td><td>${esc(r.governorate)}</td>
+      <td><span class="pill pill-amber">${esc(r.status)}</span></td>
+      <td><span class="pill ${r.training_mode==='حضوري'?'pill-violet':'pill-green'}">${esc(r.training_mode)}</span></td>
+      <td><b>${Number(r.price_omr)} ر.ع</b>${r.discount_applied?' <span class="pill pill-green" style="font-size:.7rem">خصم</span>':''}</td>
+      <td style="color:var(--muted);font-size:.82rem;white-space:nowrap">${fmtDateTime(r.created_at)}</td>
+      <td style="color:var(--muted);font-size:.84rem;max-width:200px">${esc(r.special_requests||'—')}</td>
+    </tr>`).join('')}</tbody></table>`;
+  $('#rCount').textContent=`عرض ${rows.length} من إجمالي ${REGS.length} مسجّل`;
+}
+['#rSearch','#rMode','#rStatus'].forEach(s=>$(s).addEventListener('input',renderRegTable));
+$('#exportRegsBtn').addEventListener('click',()=>{
+  const rows=regsFiltered();
+  if(!rows.length){ toast('لا توجد بيانات للتصدير',true); return; }
+  const data=rows.map((r,i)=>({'#':i+1,'الاسم':r.full_name,'رقم الهاتف':r.phone||'','البريد':r.email||'','النوع':r.gender,'المحافظة':r.governorate,'الحالة':r.status,'نوع التدريب':r.training_mode,'الرسوم (ر.ع)':Number(r.price_omr),'خصم':r.discount_applied?'نعم':'لا','الطلبات':r.special_requests||'','تاريخ التسجيل':fmtDateTime(r.created_at)}));
+  const ws=XLSX.utils.json_to_sheet(data);
+  ws['!cols']=[{wch:5},{wch:22},{wch:15},{wch:26},{wch:8},{wch:14},{wch:12},{wch:12},{wch:11},{wch:7},{wch:30},{wch:22}];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'المسجّلون');
+  XLSX.writeFile(wb,`مسجّلو_الورشة_${new Date().toISOString().slice(0,10)}.xlsx`);
+});
+</script>
+</body>
+</html>
