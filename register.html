@@ -31,6 +31,23 @@ body{
   padding:24px 16px 60px;
 }
 .wrap{max-width:680px;margin:0 auto}
+.topnav{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);
+  border-radius:16px;padding:11px 16px;margin-bottom:18px;box-shadow:0 8px 24px -18px rgba(30,27,52,.2)}
+.topnav .brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1rem;color:var(--violet-900)}
+.topnav .brand .ic{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--violet-700),var(--violet-500));display:grid;place-items:center;color:#fff;flex-shrink:0}
+.topnav .brand .ic svg{width:19px;height:19px}
+.topnav .navlinks{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
+.topnav a{font-family:inherit;font-weight:800;font-size:.88rem;text-decoration:none;padding:9px 15px;border-radius:11px;display:inline-flex;align-items:center;gap:7px;transition:all .15s;color:var(--muted)}
+.topnav a svg{width:16px;height:16px}
+.topnav a:hover{background:var(--violet-50);color:var(--violet-700)}
+.topnav a.active{background:var(--violet-100);color:var(--violet-700)}
+.topnav a.admin{background:var(--violet-900);color:#fff}
+.topnav a.admin:hover{background:var(--violet-700);color:#fff}
+@media (max-width:600px){
+  .topnav{flex-direction:column;align-items:stretch}
+  .topnav .navlinks{margin:0;justify-content:center}
+  .topnav a{flex:1;justify-content:center}
+}
 
 /* ===== الترويسة ===== */
 .hero{
@@ -269,6 +286,20 @@ input::placeholder, textarea::placeholder{color:#a9a4c4}
 </head>
 <body>
 <div class="wrap">
+
+  <!-- شريط التنقّل -->
+  <nav class="topnav">
+    <div class="brand">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+      الورش التدريبية
+    </div>
+    <div class="navlinks">
+      <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> حجز ورشة</a>
+      <a href="register.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> التسجيل في الورشة</a>
+      <a href="admin.html" class="admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> دخول المسؤول</a>
+    </div>
+  </nav>
+
 
   <!-- الترويسة -->
   <header class="hero">
