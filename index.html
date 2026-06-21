@@ -1,557 +1,427 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>احجز ورشتك التدريبية</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>منصّة حجز الورش التدريبية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --violet-900:#3b0f7e;--violet-700:#5b21b6;--violet-600:#6d28d9;--violet-500:#7c3aed;
-  --violet-100:#ede9fe;--violet-50:#f5f3ff;--ink:#1e1b34;--muted:#6b6788;
-  --line:#e4e0f4;--white:#fff;--green:#128c4b;--green-bg:#e8f7ee;--red:#b3261e;
-  --radius:18px;
+  --ink:#0c2a2a;
+  --teal:#0f4c4c;
+  --teal-700:#0a3a3a;
+  --emerald:#13a181;
+  --emerald-soft:#e7f6f1;
+  --gold:#c79a3b;
+  --gold-soft:#f7efdc;
+  --busy:#b9c2c2;
+  --busy-bg:#eef1f1;
+  --surface:#ffffff;
+  --bg:#f4f6f5;
+  --line:#e4e9e8;
+  --danger:#c0413b;
+  --shadow:0 10px 34px -16px rgba(8,40,40,.35);
+  --radius:16px;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Tajawal',sans-serif;color:var(--ink);min-height:100vh;
-  background:radial-gradient(900px 480px at 90% -10%,rgba(124,58,237,.16),transparent 60%),
-             radial-gradient(700px 440px at -10% 110%,rgba(124,58,237,.12),transparent 60%),var(--violet-50);
-  padding:24px 16px 60px}
-.wrap{max-width:920px;margin:0 auto}
-/* ── شريط التنقّل العلوي ── */
-.topnav{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);
-  border-radius:16px;padding:11px 16px;margin-bottom:18px;box-shadow:0 8px 24px -18px rgba(30,27,52,.2)}
-.topnav .brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1rem;color:var(--violet-900)}
-.topnav .brand .ic{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--violet-700),var(--violet-500));
-  display:grid;place-items:center;color:#fff;flex-shrink:0}
-.topnav .brand .ic svg{width:19px;height:19px}
-.topnav .navlinks{margin-inline-start:auto;display:flex;gap:8px;flex-wrap:wrap}
-.topnav a{font-family:inherit;font-weight:800;font-size:.88rem;text-decoration:none;padding:9px 15px;
-  border-radius:11px;display:inline-flex;align-items:center;gap:7px;transition:all .15s;color:var(--muted)}
-.topnav a svg{width:16px;height:16px}
-.topnav a:hover{background:var(--violet-50);color:var(--violet-700)}
-.topnav a.active{background:var(--violet-100);color:var(--violet-700)}
-.topnav a.admin{background:var(--violet-900);color:#fff}
-.topnav a.admin:hover{background:var(--violet-700);color:#fff}
-@media (max-width:600px){
-  .topnav{flex-direction:column;align-items:stretch}
-  .topnav .navlinks{margin:0;justify-content:center}
-  .topnav a{flex:1;justify-content:center}
-}
-.hero{background:linear-gradient(135deg,var(--violet-900),var(--violet-600));border-radius:26px;
-  padding:32px 30px;color:#fff;position:relative;overflow:hidden;margin-bottom:24px;
-  box-shadow:0 18px 45px -18px rgba(91,33,182,.55)}
-.hero::before{content:"";position:absolute;width:220px;height:220px;top:-90px;left:-60px;border-radius:50%;background:rgba(255,255,255,.08)}
-.hero .badge{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--violet-700);
-  font-weight:800;font-size:.82rem;padding:7px 16px;border-radius:999px;margin-bottom:14px;position:relative;z-index:1}
-.hero .badge svg{width:15px;height:15px}
-.hero h1{font-size:clamp(1.5rem,4.5vw,2rem);font-weight:900;line-height:1.4;position:relative;z-index:1}
-.hero p{margin-top:8px;color:#e9e3ff;line-height:1.8;position:relative;z-index:1}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.brand-name{font-family:'Reem Kufi',sans-serif}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+.hidden{display:none !important}
+a{text-decoration:none}
 
-/* خطوات */
-.steps{display:flex;gap:8px;margin-bottom:22px}
-.step{flex:1;display:flex;align-items:center;gap:9px;background:#fff;border:1.4px solid var(--line);
-  border-radius:13px;padding:11px 14px;font-weight:800;font-size:.88rem;color:var(--muted)}
-.step .n{width:24px;height:24px;border-radius:50%;background:var(--violet-100);color:var(--violet-700);
-  display:grid;place-items:center;font-size:.82rem;flex-shrink:0}
-.step.active{border-color:var(--violet-600);color:var(--violet-900)}
-.step.active .n{background:var(--violet-600);color:#fff}
-.step.done .n{background:var(--green);color:#fff}
-.step .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ===== Top bar ===== */
+.topbar{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,var(--teal),var(--teal-700));
+  color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:var(--shadow)}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .logo{width:42px;height:42px;border-radius:12px;background:radial-gradient(circle at 30% 30%,var(--gold),#9a7320);
+  display:grid;place-items:center;color:#1c1300;font-weight:800;font-size:20px;font-family:'Reem Kufi';box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+.brand-name{font-size:20px;font-weight:700;letter-spacing:.3px}
+.brand small{display:block;font-family:'Tajawal';font-weight:400;opacity:.7;font-size:12px;letter-spacing:0}
+.nav{display:flex;gap:6px;background:rgba(255,255,255,.1);padding:4px;border-radius:12px}
+.nav a{border:0;background:transparent;color:#dff0ec;padding:9px 16px;border-radius:9px;font-weight:700;font-size:14px;transition:.18s;display:inline-flex;align-items:center;gap:7px}
+.nav a svg{width:15px;height:15px}
+.nav a.active{background:#fff;color:var(--teal-700)}
+.nav a:hover:not(.active){background:rgba(255,255,255,.12)}
 
-.stage{display:none}.stage.active{display:block}
-.section-title{font-size:1.2rem;font-weight:900;margin-bottom:4px}
-.section-sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+/* ===== Layout ===== */
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+.page-head{margin:8px 0 22px}
+.page-head h2{font-size:26px;color:var(--teal-700)}
+.page-head p{color:#5b6b6b;font-size:15px;margin-top:4px}
 
-/* بطاقات الورش */
-.ws-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
-.ws-card{background:#fff;border-radius:var(--radius);border:1.6px solid var(--line);overflow:hidden;
-  cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;display:flex;flex-direction:column}
-.ws-card:hover{transform:translateY(-3px);box-shadow:0 16px 34px -18px rgba(109,40,217,.4);border-color:var(--violet-300,#c9bdf2)}
-.ws-card .img{height:160px;background:var(--violet-100);background-size:cover;background-position:center}
-.ws-card .img .noimg{width:100%;height:100%;display:grid;place-items:center;color:var(--violet-500)}
-.ws-card .img .noimg svg{width:42px;height:42px}
-.ws-card .body{padding:16px 18px;flex:1;display:flex;flex-direction:column}
-.ws-card h3{font-size:1.1rem;font-weight:900;margin-bottom:6px}
-.ws-card .desc{font-size:.86rem;color:var(--muted);line-height:1.7;flex:1;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.ws-card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
-.ws-card .price{font-size:1.2rem;font-weight:900;color:var(--violet-700)}
-.ws-card .price small{font-size:.78rem;color:var(--muted);font-weight:600}
-.ws-card .dur{font-size:.82rem;color:var(--muted);font-weight:700}
-.ws-card .pick{background:var(--violet-600);color:#fff;font-weight:800;font-size:.84rem;padding:7px 14px;border-radius:10px;display:flex;align-items:center;gap:6px}
-.ws-card .pick svg{width:15px;height:15px}
+/* ===== Cards ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:.2s}
+.card:hover{transform:translateY(-3px)}
+.card .thumb{aspect-ratio:16/10;background:var(--busy-bg);position:relative;overflow:hidden}
+.card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.card .thumb .ph{position:absolute;inset:0;display:grid;place-items:center;color:#9fb1b1;font-size:40px}
+.card .price-tag{position:absolute;top:12px;inset-inline-start:12px;background:rgba(12,42,42,.82);color:#fff;padding:5px 12px;border-radius:30px;font-weight:700;font-size:14px;backdrop-filter:blur(4px)}
+.card-body{padding:16px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card-body h3{font-size:18px;color:var(--ink)}
+.card-body .desc{color:#5e6e6e;font-size:14px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-meta{display:flex;gap:14px;color:#6c7c7c;font-size:13px;flex-wrap:wrap}
+.card-meta span{display:flex;align-items:center;gap:5px}
+.btn{border:0;border-radius:11px;padding:11px 18px;font-weight:700;font-size:15px;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:var(--emerald);color:#fff}
+.btn-primary:hover:not(:disabled){background:#0e8a6e}
+.btn-gold{background:var(--gold);color:#231700}
+.btn-gold:hover{background:#b3882f}
+.btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--teal-700)}
+.btn-ghost:hover{border-color:var(--emerald);color:var(--emerald)}
+.btn-block{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-/* اختيار الموعد */
-.back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;
-  font-family:inherit;font-weight:800;color:var(--violet-700);font-size:.92rem;margin-bottom:16px;padding:6px}
-.back svg{width:17px;height:17px}
-.chosen-ws{background:#fff;border:1.6px solid var(--line);border-radius:var(--radius);padding:16px 18px;
-  display:flex;gap:14px;align-items:center;margin-bottom:22px}
-.chosen-ws .thumb{width:64px;height:64px;border-radius:13px;background:var(--violet-100);background-size:cover;background-position:center;flex-shrink:0}
-.chosen-ws h3{font-size:1.05rem;font-weight:900}
-.chosen-ws .p{color:var(--violet-700);font-weight:800;font-size:.95rem;margin-top:3px}
+.empty{text-align:center;padding:60px 20px;color:#7d8d8d;border:2px dashed var(--line);border-radius:var(--radius);background:#fff}
+.empty .ico{font-size:46px;margin-bottom:10px}
+.loading{text-align:center;padding:60px;color:#7d8d8d;font-weight:700}
+.spin{width:34px;height:34px;border:3px solid var(--emerald-soft);border-top-color:var(--emerald);border-radius:50%;animation:r .8s linear infinite;margin:0 auto 14px}
+@keyframes r{to{transform:rotate(360deg)}}
 
-.day-block{margin-bottom:20px}
-.day-block .dh{display:flex;align-items:center;gap:9px;margin-bottom:11px}
-.day-block .dh svg{width:18px;height:18px;color:var(--violet-600)}
-.day-block .dh h4{font-size:1rem;font-weight:900}
-.times{display:flex;gap:10px;flex-wrap:wrap}
-.time-btn{font-family:inherit;font-weight:800;font-size:.92rem;cursor:pointer;background:#fff;
-  border:1.6px solid var(--line);border-radius:12px;padding:11px 18px;transition:all .15s;color:var(--ink)}
-.time-btn:hover{border-color:var(--violet-500);background:var(--violet-50)}
-.time-btn.sel{background:var(--violet-600);color:#fff;border-color:var(--violet-600)}
-/* ── تقويم اختيار الموعد ── */
-.cal-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:0 8px 24px -18px rgba(30,27,52,.2)}
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-head .m{font-weight:900;font-size:1.1rem;color:var(--violet-900)}
-.cal-nav{border:1.6px solid var(--line);background:#fff;width:38px;height:38px;border-radius:11px;font-size:1.3rem;line-height:1;color:var(--violet-700);cursor:pointer;display:grid;place-items:center;transition:.15s}
-.cal-nav:hover:not(:disabled){border-color:var(--violet-500);color:var(--violet-600)}
-.cal-nav:disabled{opacity:.35;cursor:not-allowed}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.dow{text-align:center;font-size:.74rem;font-weight:800;color:var(--muted);padding:4px 0}
-.day{aspect-ratio:1;border-radius:12px;border:1.6px solid transparent;background:#f3f1f9;color:#b4adcc;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;position:relative;transition:.15s}
-.day.free{background:var(--violet-100);color:var(--violet-900);cursor:pointer;border-color:#d9cef5}
-.day.free:hover{background:#e3dafb;border-color:var(--violet-500)}
-.day.free .dot{width:5px;height:5px;border-radius:50%;background:var(--violet-600);margin-top:3px}
-.day.sel{background:var(--violet-600);color:#fff;border-color:var(--violet-600);box-shadow:0 6px 16px -6px rgba(109,40,217,.5)}
-.day.sel .dot{background:#fff}
-.day.empty-cell{background:transparent;border:0}
-.legend{display:flex;gap:18px;margin-top:16px;font-size:.84rem;color:var(--muted);flex-wrap:wrap}
-.legend i{display:inline-block;width:14px;height:14px;border-radius:5px;margin-inline-end:6px;vertical-align:-2px}
-.times-card{margin-top:16px}
-.times-card label{display:block;font-weight:900;color:var(--violet-900);margin-bottom:10px;font-size:1rem}
+/* ===== Modal ===== */
+.overlay{position:fixed;inset:0;background:rgba(8,28,28,.55);backdrop-filter:blur(3px);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:600px;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);overflow:hidden;animation:pop .22s ease}
+@keyframes pop{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(180deg,#fff,#fafcfb)}
+.modal-head h3{font-size:19px;color:var(--teal-700)}
+.modal-head .x{border:0;background:#f0f3f2;width:34px;height:34px;border-radius:10px;font-size:18px;color:#5b6b6b}
+.modal-head .x:hover{background:#e3e9e8}
+.modal-body{padding:22px}
+.ws-strip{display:flex;gap:14px;align-items:center;background:#f6f9f8;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:18px}
+.ws-strip .pic{width:62px;height:62px;border-radius:10px;overflow:hidden;flex:none;background:var(--busy-bg);display:grid;place-items:center;color:#9fb1b1;background-size:cover;background-position:center}
+.ws-strip b{color:var(--teal-700)}
+.ws-strip .sub{color:#6c7c7c;font-size:14px}
 
-/* نموذج البيانات */
-.form-card{background:#fff;border-radius:var(--radius);border:1px solid var(--line);padding:24px;margin-top:8px}
+/* ===== Forms ===== */
 .field{margin-bottom:16px}
-.field label{display:block;font-weight:800;font-size:.92rem;margin-bottom:8px}
-.field input,.field textarea{width:100%;font-family:inherit;font-size:1rem;border:1.6px solid var(--line);
-  background:var(--violet-50);border-radius:13px;padding:13px 15px}
-.field input:focus,.field textarea:focus{outline:none;border-color:var(--violet-500);background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.13)}
-.field textarea{min-height:80px;resize:vertical}
+.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px;color:var(--teal-700)}
+.field .hint{font-weight:400;color:#8c9a9a;font-size:12px}
+.input,textarea,select{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;background:#fbfdfc;transition:.15s;color:var(--ink)}
+.input:focus,textarea:focus,select:focus{outline:0;border-color:var(--emerald);background:#fff;box-shadow:0 0 0 3px var(--emerald-soft)}
+textarea{resize:vertical;min-height:84px}
 .ltr{direction:ltr;text-align:right}
-/* اختيار مدمج (النوع/الحالة) */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.select-wrap{position:relative}
+.select-wrap select{appearance:none;cursor:pointer}
+.select-wrap::after{content:"";position:absolute;left:14px;top:50%;width:8px;height:8px;border-left:2.2px solid var(--emerald);border-bottom:2.2px solid var(--emerald);transform:translateY(-70%) rotate(-45deg);pointer-events:none}
+/* اختيار مدمج */
 .seg{display:flex;gap:8px;flex-wrap:wrap}
-.seg label{flex:1;min-width:90px;cursor:pointer}
+.seg label{flex:1;min-width:88px;cursor:pointer}
 .seg input{position:absolute;opacity:0;pointer-events:none}
-.seg .opt{display:flex;align-items:center;justify-content:center;gap:7px;text-align:center;
-  border:1.6px solid var(--line);background:var(--violet-50);border-radius:12px;padding:12px 10px;
-  font-weight:800;font-size:.92rem;transition:all .15s}
-.seg .opt svg{width:16px;height:16px;color:var(--violet-600)}
-.seg input:checked + .opt{border-color:var(--violet-600);background:#fff;color:var(--violet-900);box-shadow:0 6px 16px -10px rgba(109,40,217,.45)}
-.seg input:checked + .opt svg{color:var(--violet-600)}
-.field select{width:100%;font-family:inherit;font-size:1rem;border:1.6px solid var(--line);
-  background:var(--violet-50);border-radius:13px;padding:13px 15px;appearance:none;cursor:pointer}
-.field select:focus{outline:none;border-color:var(--violet-500);background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.13)}
-.select-wrap2{position:relative}
-.select-wrap2::after{content:"";position:absolute;left:18px;top:50%;width:8px;height:8px;
-  border-left:2.4px solid var(--violet-600);border-bottom:2.4px solid var(--violet-600);
-  transform:translateY(-70%) rotate(-45deg);pointer-events:none}
-.disc-note{display:none;align-items:center;gap:7px;background:var(--green-bg);color:var(--green);
-  border:1px solid #bfe6cd;border-radius:10px;padding:8px 12px;margin-top:9px;font-weight:800;font-size:.84rem}
+.seg .opt{display:flex;align-items:center;justify-content:center;gap:7px;text-align:center;border:1.5px solid var(--line);background:#fbfdfc;border-radius:11px;padding:11px 8px;font-weight:700;font-size:14px;color:var(--ink);transition:.15s}
+.seg .opt svg{width:15px;height:15px;color:var(--emerald)}
+.seg input:checked + .opt{border-color:var(--emerald);background:var(--emerald-soft);color:var(--teal-700)}
+.disc-note{display:none;align-items:center;gap:7px;background:var(--gold-soft);color:#8a6712;border:1px solid #ecdcb4;border-radius:10px;padding:9px 12px;margin-top:9px;font-weight:700;font-size:13px}
 .disc-note.show{display:flex}
 .disc-note svg{width:15px;height:15px}
-.summary-box{background:var(--violet-50);border:1.4px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}
-.summary-box div{display:flex;justify-content:space-between;padding:6px 0;font-size:.92rem;border-bottom:1px dashed var(--line)}
-.summary-box div:last-child{border-bottom:none}
-.summary-box span:first-child{color:var(--muted);font-weight:600}
-.summary-box span:last-child{font-weight:800;color:var(--violet-900)}
-.submit{width:100%;border:none;cursor:pointer;font-family:inherit;font-size:1.08rem;font-weight:900;color:#fff;
-  background:linear-gradient(135deg,var(--violet-900),var(--violet-500));border-radius:14px;padding:15px;
-  display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 14px 30px -12px rgba(91,33,182,.6);transition:transform .15s}
-.submit:hover:not(:disabled){transform:translateY(-2px)}.submit:disabled{opacity:.7;cursor:default}
-.err{display:none;background:#fdf0f0;border:1.4px solid #f3c5c5;color:var(--red);border-radius:13px;
-  padding:11px 16px;margin-bottom:16px;font-weight:700;font-size:.9rem}
+.err{display:none;background:#fdecea;border:1.4px solid #f2c4c0;color:var(--danger);border-radius:11px;padding:10px 14px;margin-bottom:14px;font-weight:700;font-size:14px}
 .err.show{display:block}
 
-/* نجاح */
-.success{display:none;text-align:center;background:#fff;border-radius:var(--radius);padding:40px 28px;
-  box-shadow:0 12px 40px -16px rgba(30,27,52,.18)}
-.success.show{display:block;animation:pop .35s ease}
-@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-.success .ring{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--green),#25d366);
-  display:grid;place-items:center;margin:0 auto 20px;box-shadow:0 16px 35px -12px rgba(18,140,75,.5)}
-.success .ring svg{width:42px;height:42px;color:#fff}
-.success h2{font-size:1.5rem;font-weight:900;margin-bottom:10px}
-.success p{color:var(--muted);line-height:2}
-.success .summary-box{text-align:right;max-width:420px;margin:22px auto 0}
+/* ===== Calendar ===== */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-head .m{font-family:'Reem Kufi';font-size:18px;color:var(--teal-700)}
+.cal-nav{border:1.5px solid var(--line);background:#fff;width:36px;height:36px;border-radius:10px;font-size:18px;color:var(--teal-700)}
+.cal-nav:hover:not(:disabled){border-color:var(--emerald);color:var(--emerald)}
+.cal-nav:disabled{opacity:.4;cursor:not-allowed}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dow{text-align:center;font-size:12px;font-weight:700;color:#8c9a9a;padding:4px 0}
+.day{aspect-ratio:1;border-radius:11px;border:1.5px solid transparent;background:var(--busy-bg);color:#aeb9b9;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:15px;position:relative;transition:.15s}
+.day.free{background:var(--emerald-soft);color:var(--teal-700);cursor:pointer;border-color:#cdeee3}
+.day.free:hover{background:#d4efe7;border-color:var(--emerald)}
+.day.free .dot{width:5px;height:5px;border-radius:50%;background:var(--emerald);margin-top:3px}
+.day.sel{background:var(--emerald);color:#fff;border-color:var(--emerald);box-shadow:0 6px 16px -6px var(--emerald)}
+.day.sel .dot{background:#fff}
+.day.empty-cell{background:transparent;border:0}
+.legend{display:flex;gap:18px;margin-top:14px;font-size:13px;color:#5e6e6e;flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:5px;margin-inline-end:6px;vertical-align:-2px}
+.slots{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
+.slot{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 15px;font-weight:700;font-size:14px;color:var(--teal-700);transition:.15s}
+.slot:hover:not(:disabled){border-color:var(--emerald);color:var(--emerald)}
+.slot.sel{background:var(--emerald);color:#fff;border-color:var(--emerald)}
 
-.loading{text-align:center;padding:70px;color:var(--muted);font-weight:700}
-.spin{width:36px;height:36px;border:3px solid var(--violet-100);border-top-color:var(--violet-600);border-radius:50%;animation:r .8s linear infinite;margin:0 auto 16px}
-@keyframes r{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:60px 20px;background:#fff;border:1px dashed var(--line);border-radius:var(--radius);color:var(--muted)}
-.empty svg{width:54px;height:54px;color:var(--line);margin-bottom:14px}
-.empty h3{font-size:1.15rem;font-weight:800;color:var(--ink);margin-bottom:6px}
-@media (max-width:560px){
-  .steps{flex-direction:column}.step .lbl{white-space:normal}
-  .hero{padding:26px 22px}
+/* ===== Confirmation ===== */
+.confirm{text-align:center;padding:8px 4px}
+.confirm .seal{width:78px;height:78px;border-radius:50%;background:var(--emerald-soft);display:grid;place-items:center;margin:0 auto 14px;font-size:38px;color:var(--emerald)}
+.summary{background:#f6f9f8;border:1px solid var(--line);border-radius:13px;padding:16px;text-align:start;margin:16px 0}
+.summary div{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-size:15px;gap:12px}
+.summary div:last-child{border:0}
+.summary b{color:var(--teal-700);text-align:left}
+
+.toast{position:fixed;bottom:24px;inset-inline-start:50%;transform:translateX(50%);background:var(--teal-700);color:#fff;padding:13px 22px;border-radius:12px;font-weight:700;z-index:90;box-shadow:var(--shadow);animation:pop .2s}
+@media(max-width:560px){
+  .row2{grid-template-columns:1fr}
+  .brand-name{font-size:17px}
+  .nav a{padding:8px 11px;font-size:13px}
+  .wrap{padding:20px 14px 70px}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <nav class="topnav">
-    <div class="brand">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
-      الورش التدريبية
-    </div>
-    <div class="navlinks">
-      <a href="index.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> حجز ورشة</a>
-      <a href="admin.html" class="admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> دخول المسؤول</a>
-    </div>
-  </nav>
-  <div class="hero">
-    <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> حجز ورشة تدريبية</span>
-    <h1>احجز ورشتك التدريبية في دقيقة</h1>
-    <p>اختر الورشة المناسبة، ثم الموعد الذي يناسبك، وأكمل الحجز — دون حاجة لتسجيل دخول.</p>
-  </div>
 
-  <div class="steps" id="steps">
-    <div class="step active" data-step="1"><span class="n">1</span><span class="lbl">اختر الورشة</span></div>
-    <div class="step" data-step="2"><span class="n">2</span><span class="lbl">اختر الموعد</span></div>
-    <div class="step" data-step="3"><span class="n">3</span><span class="lbl">أكمل بياناتك</span></div>
-  </div>
-
-  <!-- مرحلة ١: الورش -->
-  <div class="stage active" id="stage1">
-    <div class="section-title">الورش المتاحة</div>
-    <div class="section-sub">اختر الورشة التي ترغب بحضورها</div>
-    <div id="wsArea"><div class="loading"><div class="spin"></div>جارٍ تحميل الورش…</div></div>
-  </div>
-
-  <!-- مرحلة ٢: الموعد -->
-  <div class="stage" id="stage2">
-    <button class="back" id="back1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg> رجوع للورش</button>
-    <div class="chosen-ws" id="chosenWs"></div>
-    <div class="section-title">اختر اليوم والوقت المناسب</div>
-    <div class="section-sub">الأيام المتاحة مميّزة باللون البنفسجي — اختر يومًا ثم الوقت</div>
-    <div id="slotsArea"></div>
-  </div>
-
-  <!-- مرحلة ٣: البيانات -->
-  <div class="stage" id="stage3">
-    <button class="back" id="back2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg> رجوع للمواعيد</button>
-    <div class="section-title">أكمل بيانات الحجز</div>
-    <div class="section-sub">سنستخدم بياناتك للتواصل وتأكيد الموعد</div>
-    <div class="form-card">
-      <div class="summary-box" id="bkSummary"></div>
-      <div class="err" id="formErr"></div>
-      <div class="field"><label for="bName">الاسم الكامل</label><input type="text" id="bName" placeholder="اكتب اسمك الثلاثي"></div>
-      <div class="field"><label for="bPhone">رقم الهاتف</label><input type="tel" id="bPhone" class="ltr" placeholder="مثال: 91312183" inputmode="tel"></div>
-      <div class="field"><label for="bEmail">البريد الإلكتروني <span style="color:var(--muted);font-weight:500;font-size:.84rem">(اختياري)</span></label><input type="email" id="bEmail" class="ltr" placeholder="example@email.com" inputmode="email"></div>
-
-      <div class="field"><label>النوع</label>
-        <div class="seg" id="bGender">
-          <label><input type="radio" name="bgender" value="ذكر"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="5"/><path d="M14 10l6-6M15 4h5v5" stroke-linecap="round" stroke-linejoin="round"/></svg> ذكر</span></label>
-          <label><input type="radio" name="bgender" value="أنثى"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="5"/><path d="M12 14v7M9 18h6" stroke-linecap="round"/></svg> أنثى</span></label>
-        </div>
-      </div>
-
-      <div class="field"><label for="bGov">المحافظة</label>
-        <div class="select-wrap2">
-          <select id="bGov">
-            <option value="" selected disabled>اختر محافظتك</option>
-            <option>مسقط</option><option>ظفار</option><option>مسندم</option><option>البريمي</option>
-            <option>الداخلية</option><option>شمال الباطنة</option><option>جنوب الباطنة</option>
-            <option>شمال الشرقية</option><option>جنوب الشرقية</option><option>الظاهرة</option><option>الوسطى</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field"><label>الحالة</label>
-        <div class="seg" id="bStatus">
-          <label><input type="radio" name="bstatus" value="طالب"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg> طالب</span></label>
-          <label><input type="radio" name="bstatus" value="موظف"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> موظف</span></label>
-          <label><input type="radio" name="bstatus" value="باحث عن عمل"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> باحث عن عمل</span></label>
-        </div>
-        <div class="disc-note" id="discNote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> مبروك! تم تطبيق خصم ٥٠٪ على الرسوم</div>
-      </div>
-
-      <div class="field"><label for="bNotes">طلبات خاصة <span style="color:var(--muted);font-weight:500;font-size:.84rem">(اختياري)</span></label><textarea id="bNotes" placeholder="أي ملاحظة تود إضافتها"></textarea></div>
-      <button class="submit" id="confirmBtn">تأكيد الحجز <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M20 6 9 17l-5-5"/></svg></button>
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">و</div>
+    <div>
+      <div class="brand-name">منصّة الورش</div>
+      <small>احجز ورشتك التدريبية</small>
     </div>
   </div>
-
-  <!-- نجاح -->
-  <div class="success" id="success">
-    <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-    <h2>تم تأكيد حجزك 🎉</h2>
-    <p>شكرًا لك! تم حفظ موعدك بنجاح، وسنتواصل معك قريبًا لتأكيد التفاصيل.</p>
-    <div class="summary-box" id="successSummary"></div>
+  <div class="nav">
+    <a class="active">الورش</a>
+    <a href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> دخول المسؤول</a>
   </div>
 </div>
 
+<div class="wrap">
+  <div class="page-head">
+    <h2>الورش التدريبية المتاحة</h2>
+    <p>اختر الورشة المناسبة، ثم احجز اليوم والوقت المتاح — بدون حاجة لتسجيل دخول.</p>
+  </div>
+  <div id="publicGrid" class="grid"><div class="loading" style="grid-column:1/-1"><div class="spin"></div>جارٍ تحميل الورش…</div></div>
+</div>
+
+<div id="modalMount"></div>
+<div id="toastMount"></div>
+
 <script>
+/* ===================== الإعدادات ===================== */
 const SUPABASE_URL = 'https://ajgtatisurcpygzernsy.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_TKQW1nN5DaJg1pH_u2s19Q_9z-8EGWW';
 const ADMIN_EMAIL  = 'iks.alalawi@gmail.com';
 const WHATSAPP_NUM = '96891312183';
-let WORKSHOPS=[], SLOTS=[], sel={ws:null, slot:null};
+const DISCOUNT_STATUSES = ['طالب','باحث عن عمل'];
+const DOW = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const GOVS = ['مسقط','ظفار','مسندم','البريمي','الداخلية','شمال الباطنة','جنوب الباطنة','شمال الشرقية','جنوب الشرقية','الظاهرة','الوسطى'];
+
+let WORKSHOPS=[], SLOTS=[];
+let bk=null; /* {ws, month, date, slotId} */
+
 const $=s=>document.querySelector(s);
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function money(v){ return Number(v)+' ر.ع'; }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function fmtDay(s){ return new Date(s+'T00:00:00').toLocaleDateString('ar',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; $('#toastMount').appendChild(t); setTimeout(()=>t.remove(),2600); }
 
 async function api(path, opts={}){
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{
-    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json',...(opts.headers||{})},
-    ...opts});
-  const d = await r.json();
-  if(!r.ok) throw new Error(d.message||'تعذّر الاتصال');
-  return d;
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json',...(opts.headers||{})},...opts});
+  const d=await r.json(); if(!r.ok) throw new Error(d.message||'تعذّر الاتصال'); return d;
 }
-function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-function fmtDay(d){ return new Date(d+'T00:00:00').toLocaleDateString('ar',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
+function openModal(html){ $('#modalMount').innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`; }
+function closeModal(){ $('#modalMount').innerHTML=''; }
 
-function setStep(n){
-  document.querySelectorAll('.step').forEach(s=>{
-    const sn=+s.dataset.step; s.classList.toggle('active',sn===n); s.classList.toggle('done',sn<n);
-  });
-  document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
-  $('#success').classList.remove('show');
-  if(n>=1&&n<=3) $('#stage'+n).classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-/* تحميل الورش */
+/* ===================== الورش ===================== */
 async function loadWorkshops(){
   try{
     WORKSHOPS = await api('workshops?select=*&is_active=eq.true&order=created_at.desc');
-    renderWorkshops();
-  }catch(e){ $('#wsArea').innerHTML=`<div class="empty"><h3>تعذّر تحميل الورش</h3><p>حاول تحديث الصفحة</p></div>`; }
+    renderPublic();
+  }catch(e){ $('#publicGrid').innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="ico">⚠️</div><b>تعذّر تحميل الورش</b><p>حاول تحديث الصفحة</p></div>`; }
 }
-function renderWorkshops(){
-  if(!WORKSHOPS.length){ $('#wsArea').innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><h3>لا توجد ورش متاحة حاليًا</h3><p>تابعنا قريبًا لإضافة ورش جديدة</p></div>`; return; }
-  $('#wsArea').innerHTML = `<div class="ws-grid">${WORKSHOPS.map(w=>`
-    <div class="ws-card" onclick="pickWs('${w.id}')">
-      <div class="img" style="${w.image_url?`background-image:url('${esc(w.image_url)}')`:''}">
-        ${!w.image_url?`<div class="noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>`:''}
+function renderPublic(){
+  const g=$('#publicGrid');
+  if(!WORKSHOPS.length){ g.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="ico">🎓</div><b>لا توجد ورش منشورة بعد</b><p>تابعنا قريبًا لإضافة ورش جديدة.</p></div>`; return; }
+  g.innerHTML = WORKSHOPS.map(w=>`
+    <div class="card">
+      <div class="thumb">
+        ${w.image_url?`<img src="${esc(w.image_url)}" alt="">`:`<div class="ph">🖼️</div>`}
+        <span class="price-tag">${money(w.price_omr)}</span>
       </div>
-      <div class="body">
+      <div class="card-body">
         <h3>${esc(w.title)}</h3>
         <p class="desc">${esc(w.description||'')}</p>
-        <div class="foot">
-          <div><div class="price">${Number(w.price_omr)} <small>ر.ع</small></div>${w.duration?`<div class="dur">${esc(w.duration)}</div>`:''}</div>
-          <span class="pick">احجز <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></span>
+        <div class="card-meta">
+          ${w.duration?`<span>⏱️ ${esc(w.duration)}</span>`:''}
+          <span>📅 مواعيد متعددة</span>
         </div>
+        <button class="btn btn-primary btn-block" onclick="openBooking('${w.id}')">احجز موعدك</button>
       </div>
-    </div>`).join('')}</div>`;
+    </div>`).join('');
 }
 
-/* اختيار ورشة → تحميل المواعيد */
-window.pickWs = async id=>{
-  sel.ws = WORKSHOPS.find(w=>w.id===id); sel.slot=null;
-  $('#chosenWs').innerHTML = `
-    <div class="thumb" style="${sel.ws.image_url?`background-image:url('${esc(sel.ws.image_url)}')`:''}"></div>
-    <div><h3>${esc(sel.ws.title)}</h3><div class="p">${Number(sel.ws.price_omr)} ريال عماني${sel.ws.duration?' · '+esc(sel.ws.duration):''}</div></div>`;
-  setStep(2);
-  $('#slotsArea').innerHTML=`<div class="loading"><div class="spin"></div>جارٍ تحميل المواعيد…</div>`;
+/* ===================== نافذة الحجز ===================== */
+window.openBooking = async wid=>{
+  const w=WORKSHOPS.find(x=>x.id===wid); if(!w) return;
+  bk={ ws:w, month:new Date(new Date().getFullYear(),new Date().getMonth(),1), date:null, slotId:null };
+  openModal(`
+    <div class="modal-head"><h3>حجز: ${esc(w.title)}</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body" id="bkBody"><div class="loading"><div class="spin"></div>جارٍ تحميل المواعيد…</div></div>`);
   try{
-    const today=new Date().toISOString().slice(0,10);
-    SLOTS = await api(`availability_slots?select=*&status=eq.available&slot_date=gte.${today}&order=slot_date,start_time`);
-    renderSlots();
-  }catch(e){ $('#slotsArea').innerHTML=`<div class="empty"><h3>تعذّر تحميل المواعيد</h3></div>`; }
+    SLOTS = await api(`availability_slots?select=*&status=eq.available&slot_date=gte.${todayStr()}&order=slot_date,start_time`);
+    // ابدأ من أقرب شهر فيه مواعيد
+    if(SLOTS.length){
+      const fs=new Date(SLOTS[0].slot_date+'T00:00:00'); const now=new Date();
+      bk.month = (fs.getFullYear()>now.getFullYear()||(fs.getFullYear()===now.getFullYear()&&fs.getMonth()>now.getMonth()))
+        ? new Date(fs.getFullYear(),fs.getMonth(),1) : new Date(now.getFullYear(),now.getMonth(),1);
+    }
+    renderBkBody();
+  }catch(e){ $('#bkBody').innerHTML=`<div class="empty"><div class="ico">⚠️</div><b>تعذّر تحميل المواعيد</b></div>`; }
 };
 
-const DOW = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-let calMonth = null;       // أول يوم في الشهر المعروض
-let slotDates = new Set(); // التواريخ التي بها مواعيد متاحة
-let pickedDate = null;
-
-function renderSlots(){
-  const area=$('#slotsArea');
-  slotDates = new Set(SLOTS.map(s=>s.slot_date));
-  if(!SLOTS.length){
-    area.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><h3>لا توجد مواعيد متاحة حاليًا</h3><p>يرجى المحاولة لاحقًا أو التواصل مع المنظّم</p></div>`;
-    return;
-  }
-  // ابدأ من أقرب شهر فيه مواعيد (أو الشهر الحالي)
-  const firstSlot = [...slotDates].sort()[0];
-  const fs = new Date(firstSlot+'T00:00:00');
-  const now = new Date();
-  const startM = (fs.getFullYear()>now.getFullYear() || (fs.getFullYear()===now.getFullYear()&&fs.getMonth()>now.getMonth()))
-    ? new Date(fs.getFullYear(),fs.getMonth(),1) : new Date(now.getFullYear(),now.getMonth(),1);
-  calMonth = startM;
-  pickedDate = null;
-  area.innerHTML = `<div class="cal-card"><div id="calMount"></div></div><div id="timesMount"></div>`;
+function renderBkBody(){
+  const w=bk.ws;
+  $('#bkBody').innerHTML=`
+    <div class="ws-strip">
+      <div class="pic" style="${w.image_url?`background-image:url('${esc(w.image_url)}')`:''}">${w.image_url?'':'🖼️'}</div>
+      <div><b>${esc(w.title)}</b><div class="sub">${money(w.price_omr)}${w.duration?' · '+esc(w.duration):''}</div></div>
+    </div>
+    <div id="calMount"></div>
+    <div id="slotMount" style="margin-top:16px"></div>
+    <div id="formMount"></div>`;
   renderCalendar();
 }
 
 function renderCalendar(){
-  const y=calMonth.getFullYear(), m=calMonth.getMonth();
+  const first=bk.month, y=first.getFullYear(), m=first.getMonth();
   const startDow=new Date(y,m,1).getDay();
   const days=new Date(y,m+1,0).getDate();
-  const monthName=calMonth.toLocaleDateString('ar',{month:'long',year:'numeric'});
-  const today=new Date(); const curM=new Date(today.getFullYear(),today.getMonth(),1);
-  const atMin = calMonth<=curM;
-  const todayStr=new Date().toISOString().slice(0,10);
+  const monthName=first.toLocaleDateString('ar',{month:'long',year:'numeric'});
+  const now=new Date(); const minMonth=(y<now.getFullYear())||(y===now.getFullYear()&&m<=now.getMonth());
+  const slotDates=new Set(SLOTS.map(s=>s.slot_date));
 
   let cells='';
   for(let i=0;i<startDow;i++) cells+=`<div class="day empty-cell"></div>`;
   for(let d=1;d<=days;d++){
     const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const free = slotDates.has(ds) && ds>=todayStr;
-    const sel = pickedDate===ds;
+    const free = slotDates.has(ds) && ds>=todayStr();
+    const sel = bk.date===ds;
     cells+=`<div class="day ${free?'free':''} ${sel?'sel':''}" ${free?`onclick="pickDay('${ds}')"`:''}>${d}${free?'<span class="dot"></span>':''}</div>`;
   }
   $('#calMount').innerHTML=`
     <div class="cal-head">
-      <button class="cal-nav" onclick="moveMonth(-1)" ${atMin?'disabled':''}>›</button>
+      <button class="cal-nav" onclick="moveMonth(1)">›</button>
       <span class="m">${monthName}</span>
-      <button class="cal-nav" onclick="moveMonth(1)">‹</button>
+      <button class="cal-nav" onclick="moveMonth(-1)" ${minMonth?'disabled':''}>‹</button>
     </div>
     <div class="cal-grid">${DOW.map(d=>`<div class="dow">${d.slice(0,3)}</div>`).join('')}${cells}</div>
     <div class="legend">
-      <span><i style="background:var(--violet-100);border:1px solid #d9cef5"></i>يوم متاح</span>
-      <span><i style="background:#f3f1f9"></i>غير متاح</span>
+      <span><i style="background:var(--emerald-soft);border:1px solid #cdeee3"></i>يوم متاح</span>
+      <span><i style="background:var(--busy-bg)"></i>مشغول / غير متاح</span>
     </div>`;
 }
-
 window.moveMonth = dir=>{
-  const d=new Date(calMonth); d.setMonth(d.getMonth()+dir);
-  const today=new Date(); const curM=new Date(today.getFullYear(),today.getMonth(),1);
-  if(d<curM) return;
-  calMonth=d; renderCalendar();
+  const d=new Date(bk.month); d.setMonth(d.getMonth()+dir);
+  const minM=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+  if(d<minM) return;
+  bk.month=d; bk.date=null; bk.slotId=null;
+  renderCalendar(); $('#slotMount').innerHTML=''; $('#formMount').innerHTML='';
 };
-
 window.pickDay = ds=>{
-  pickedDate=ds; sel.slot=null;
+  bk.date=ds; bk.slotId=null;
   renderCalendar();
-  const daySlots = SLOTS.filter(s=>s.slot_date===ds).sort((a,b)=>a.start_time<b.start_time?-1:1);
-  $('#timesMount').innerHTML=`
-    <div class="cal-card times-card">
-      <label>الأوقات المتاحة — ${fmtDay(ds)}</label>
-      <div class="times">${daySlots.map(s=>`<button class="time-btn" data-id="${s.id}" onclick="pickSlot('${s.id}')">${esc(s.start_time)} - ${esc(s.end_time)}</button>`).join('')}</div>
-    </div>`;
-  $('#timesMount').scrollIntoView({behavior:'smooth',block:'nearest'});
+  const daySlots=SLOTS.filter(s=>s.slot_date===ds).sort((a,b)=>a.start_time<b.start_time?-1:1);
+  $('#slotMount').innerHTML=`
+    <label style="display:block;font-weight:700;color:var(--teal-700);margin-bottom:8px">الأوقات المتاحة — ${fmtDay(ds)}</label>
+    <div class="slots">${daySlots.map(s=>`<button class="slot" data-id="${s.id}" onclick="pickSlot('${s.id}',this)">${esc(s.start_time)} - ${esc(s.end_time)}</button>`).join('')}</div>`;
+  $('#formMount').innerHTML='';
+};
+window.pickSlot = (sid,el)=>{
+  bk.slotId=sid;
+  document.querySelectorAll('#slotMount .slot').forEach(s=>s.classList.remove('sel'));
+  el.classList.add('sel');
+  renderForm();
 };
 
-window.pickSlot = id=>{
-  sel.slot = SLOTS.find(s=>s.id===id);
-  document.querySelectorAll('.time-btn').forEach(b=>b.classList.toggle('sel',b.dataset.id===id));
-  setTimeout(()=>goToForm(), 280);
-};
-
-const DISCOUNT_STATUSES = ['طالب','باحث عن عمل'];
-function selectedStatus(){ const s=document.querySelector('input[name=bstatus]:checked'); return s?s.value:null; }
-function finalPrice(){
-  const base=Number(sel.ws.price_omr);
-  return DISCOUNT_STATUSES.includes(selectedStatus()) ? base/2 : base;
+function renderForm(){
+  $('#formMount').innerHTML=`
+    <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+    <div class="err" id="bkErr"></div>
+    <div class="field"><label>الاسم الكامل</label><input class="input" id="bkName" placeholder="اكتب اسمك الثلاثي"></div>
+    <div class="row2">
+      <div class="field"><label>رقم الجوال / واتساب</label><input class="input ltr" id="bkPhone" placeholder="مثال: 9XXXXXXX" inputmode="tel"></div>
+      <div class="field"><label>البريد الإلكتروني <span class="hint">(اختياري)</span></label><input class="input ltr" id="bkEmail" placeholder="example@email.com" inputmode="email"></div>
+    </div>
+    <div class="field"><label>النوع</label>
+      <div class="seg" id="bkGender">
+        <label><input type="radio" name="bkg" value="ذكر"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="5"/><path d="M14 10l6-6M15 4h5v5" stroke-linecap="round" stroke-linejoin="round"/></svg> ذكر</span></label>
+        <label><input type="radio" name="bkg" value="أنثى"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="5"/><path d="M12 14v7M9 18h6" stroke-linecap="round"/></svg> أنثى</span></label>
+      </div>
+    </div>
+    <div class="field"><label>المحافظة</label>
+      <div class="select-wrap"><select class="input" id="bkGov"><option value="" selected disabled>اختر محافظتك</option>${GOVS.map(g=>`<option>${g}</option>`).join('')}</select></div>
+    </div>
+    <div class="field"><label>الحالة</label>
+      <div class="seg" id="bkStatus">
+        <label><input type="radio" name="bks" value="طالب"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg> طالب</span></label>
+        <label><input type="radio" name="bks" value="موظف"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> موظف</span></label>
+        <label><input type="radio" name="bks" value="باحث عن عمل"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> باحث عن عمل</span></label>
+      </div>
+      <div class="disc-note" id="bkDisc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> مبروك! تم تطبيق خصم ٥٠٪ على الرسوم</div>
+    </div>
+    <div class="field"><label>ملاحظة <span class="hint">(اختياري)</span></label><textarea id="bkNote" placeholder="أي ملاحظة تود إضافتها"></textarea></div>
+    <button class="btn btn-primary btn-block" onclick="confirmBooking()">تأكيد الحجز</button>`;
+  document.querySelectorAll('input[name=bks]').forEach(r=>r.addEventListener('change',()=>{
+    $('#bkDisc').classList.toggle('show', DISCOUNT_STATUSES.includes((document.querySelector('input[name=bks]:checked')||{}).value));
+  }));
+  $('#formMount').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-function priceText(){
-  const base=Number(sel.ws.price_omr), disc=DISCOUNT_STATUSES.includes(selectedStatus());
-  return disc ? `${base/2} ريال عماني (خصم ٥٠٪ بدل ${base})` : `${base} ريال عماني`;
-}
-function updateSummaryPrice(){
-  const row=document.getElementById('priceRow');
-  if(row) row.querySelector('span:last-child').textContent = priceText();
-  $('#discNote').classList.toggle('show', DISCOUNT_STATUSES.includes(selectedStatus()));
-}
-document.querySelectorAll('input[name=bstatus]').forEach(r=>r.addEventListener('change', updateSummaryPrice));
 
-function goToForm(){
-  $('#bkSummary').innerHTML = `
-    <div><span>الورشة</span><span>${esc(sel.ws.title)}</span></div>
-    <div><span>اليوم</span><span>${fmtDay(sel.slot.slot_date)}</span></div>
-    <div><span>الوقت</span><span>${esc(sel.slot.start_time)} - ${esc(sel.slot.end_time)}</span></div>
-    <div id="priceRow"><span>الرسوم</span><span>${priceText()}</span></div>`;
-  updateSummaryPrice();
-  setStep(3);
-}
-
-$('#back1').addEventListener('click', ()=>setStep(1));
-$('#back2').addEventListener('click', ()=>setStep(2));
-
-/* تأكيد الحجز */
-$('#confirmBtn').addEventListener('click', async ()=>{
-  const name=$('#bName').value.trim(), phone=$('#bPhone').value.trim(),
-        email=$('#bEmail').value.trim(), notes=$('#bNotes').value.trim(),
-        gov=$('#bGov').value, status=selectedStatus();
-  const gender=(document.querySelector('input[name=bgender]:checked')||{}).value;
-  const err=$('#formErr');
-  if(!name||!phone){ err.textContent='⚠️ يرجى إدخال الاسم ورقم الهاتف'; err.classList.add('show'); return; }
-  if(phone.replace(/\D/g,'').length<8){ err.textContent='⚠️ يرجى إدخال رقم هاتف صحيح'; err.classList.add('show'); return; }
-  if(!gender){ err.textContent='⚠️ يرجى اختيار النوع'; err.classList.add('show'); return; }
-  if(!gov){ err.textContent='⚠️ يرجى اختيار المحافظة'; err.classList.add('show'); return; }
-  if(!status){ err.textContent='⚠️ يرجى اختيار الحالة'; err.classList.add('show'); return; }
+async function confirmBooking(){
+  const name=$('#bkName').value.trim(), phone=$('#bkPhone').value.trim(), email=$('#bkEmail').value.trim();
+  const gov=$('#bkGov').value, note=$('#bkNote').value.trim();
+  const gender=(document.querySelector('input[name=bkg]:checked')||{}).value;
+  const status=(document.querySelector('input[name=bks]:checked')||{}).value;
+  const err=$('#bkErr');
+  const fail=m=>{ err.textContent='⚠️ '+m; err.classList.add('show'); };
+  if(!name||!phone){ fail('يرجى إدخال الاسم ورقم الجوال'); return; }
+  if(phone.replace(/\D/g,'').length<8){ fail('يرجى إدخال رقم جوال صحيح'); return; }
+  if(!gender){ fail('يرجى اختيار النوع'); return; }
+  if(!gov){ fail('يرجى اختيار المحافظة'); return; }
+  if(!status){ fail('يرجى اختيار الحالة'); return; }
   err.classList.remove('show');
-  const btn=$('#confirmBtn'); btn.disabled=true; btn.textContent='جارٍ تأكيد الحجز…';
+  const btn=event.target; btn.disabled=true; btn.textContent='جارٍ تأكيد الحجز…';
   try{
-    const res = await api('rpc/book_slot',{method:'POST',body:JSON.stringify({
-      p_slot_id:sel.slot.id, p_workshop_id:sel.ws.id, p_name:name, p_phone:phone,
-      p_email:email||null, p_gender:gender, p_governorate:gov, p_status:status, p_notes:notes||null
+    const res=await api('rpc/book_slot',{method:'POST',body:JSON.stringify({
+      p_slot_id:bk.slotId, p_workshop_id:bk.ws.id, p_name:name, p_phone:phone, p_email:email||null,
+      p_gender:gender, p_governorate:gov, p_status:status, p_notes:note||null
     })});
-    if(!res.ok){ err.textContent='⚠️ '+res.error; err.classList.add('show'); btn.disabled=false; btn.innerHTML='تأكيد الحجز'; return; }
-
-    const dayTxt = fmtDay(sel.slot.slot_date);
-    const timeTxt = `${sel.slot.start_time} - ${sel.slot.end_time}`;
-    const priceTxt = res.discount
-      ? `${res.price} ريال عماني (خصم ٥٠٪ بدل ${res.base_price})`
-      : `${res.price} ريال عماني`;
+    if(!res.ok){ fail(res.error); btn.disabled=false; btn.textContent='تأكيد الحجز'; return; }
+    const slot=SLOTS.find(s=>s.id===bk.slotId);
+    const timeTxt=`${slot.start_time} - ${slot.end_time}`;
+    const priceTxt=res.discount?`${res.price} ر.ع (خصم ٥٠٪ بدل ${res.base_price})`:`${res.price} ر.ع`;
 
     /* إشعار تلقائي إلى بريد المنظّم */
-    fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
-      method:'POST',
+    fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`,{method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify({
-        _subject: `🗓️ حجز جديد: ${name} — ${sel.ws.title}`,
-        _template: 'table',
-        _replyto: email || '',
-        'الورشة': sel.ws.title,
-        'اليوم': dayTxt,
-        'الوقت': timeTxt,
-        'الاسم': name,
-        'رقم الهاتف': phone,
-        'البريد': email || 'لا يوجد',
-        'النوع': gender,
-        'المحافظة': gov,
-        'الحالة': status,
-        'الرسوم': priceTxt,
-        'طلبات خاصة': notes || 'لا يوجد'
-      })
+      body:JSON.stringify({_subject:`🗓️ حجز جديد: ${name} — ${bk.ws.title}`,_template:'table',_replyto:email||'',
+        'الورشة':bk.ws.title,'اليوم':fmtDay(bk.date),'الوقت':timeTxt,'الاسم':name,'رقم الجوال':phone,
+        'البريد':email||'لا يوجد','النوع':gender,'المحافظة':gov,'الحالة':status,'الرسوم':priceTxt,'ملاحظة':note||'لا يوجد'})
     }).catch(()=>{});
 
-    $('#successSummary').innerHTML = `
-      <div><span>الورشة</span><span>${esc(sel.ws.title)}</span></div>
-      <div><span>اليوم</span><span>${dayTxt}</span></div>
-      <div><span>الوقت</span><span>${esc(timeTxt)}</span></div>
-      <div><span>الاسم</span><span>${esc(name)}</span></div>
-      <div><span>الحالة</span><span>${esc(status)}</span></div>
-      <div><span>الرسوم</span><span>${priceTxt}</span></div>`;
+    showConfirmation({name,phone,email,gender,gov,status,note,timeTxt,priceTxt});
+  }catch(e){ fail('تعذّر إتمام الحجز، حاول مجددًا'); btn.disabled=false; btn.textContent='تأكيد الحجز'; }
+}
 
-    /* زر تأكيد عبر واتساب */
-    const waText = encodeURIComponent(
-      `*حجز جديد في ورشة تدريبية*\n` +
-      `——————————————\n` +
-      `الورشة: ${sel.ws.title}\n` +
-      `اليوم: ${dayTxt}\n` +
-      `الوقت: ${timeTxt}\n` +
-      `الاسم: ${name}\n` +
-      `رقم الهاتف: ${phone}\n` +
-      (email ? `البريد: ${email}\n` : '') +
-      `النوع: ${gender}\nالمحافظة: ${gov}\nالحالة: ${status}\n` +
-      `الرسوم: ${priceTxt}` +
-      (notes ? `\nطلبات خاصة: ${notes}` : '')
-    );
-    const old = $('#waBtn'); if(old) old.remove();
-    const waBtn = document.createElement('a');
-    waBtn.id = 'waBtn';
-    waBtn.href = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUM}&text=${waText}`;
-    waBtn.target = '_blank'; waBtn.rel = 'noopener';
-    waBtn.className = 'submit';
-    waBtn.style.cssText = 'margin-top:18px;max-width:420px;margin-inline:auto;text-decoration:none;background:linear-gradient(135deg,#128c4b,#25d366)';
-    waBtn.innerHTML = '🟢 أرسل تأكيد حجزك عبر واتساب';
-    $('#successSummary').after(waBtn);
-
-    document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
-    document.querySelectorAll('.step').forEach(s=>s.classList.add('done'));
-    $('#success').classList.add('show');
-    window.scrollTo({top:0,behavior:'smooth'});
-  }catch(e){
-    err.textContent='⚠️ تعذّر إتمام الحجز، حاول مرة أخرى'; err.classList.add('show');
-    btn.disabled=false; btn.innerHTML='تأكيد الحجز';
-  }
-});
+function showConfirmation(o){
+  const wa=WHATSAPP_NUM.replace(/\D/g,'');
+  const txt=encodeURIComponent(
+    `*حجز جديد في ورشة تدريبية*\n——————————————\n`+
+    `الورشة: ${bk.ws.title}\nاليوم: ${fmtDay(bk.date)}\nالوقت: ${o.timeTxt}\n`+
+    `الاسم: ${o.name}\nرقم الجوال: ${o.phone}\n`+(o.email?`البريد: ${o.email}\n`:'')+
+    `النوع: ${o.gender}\nالمحافظة: ${o.gov}\nالحالة: ${o.status}\nالرسوم: ${o.priceTxt}`+
+    (o.note?`\nملاحظة: ${o.note}`:''));
+  $('#bkBody').innerHTML=`
+    <div class="confirm">
+      <div class="seal">✓</div>
+      <h3 style="color:var(--teal-700);font-size:22px">تم تأكيد حجزك</h3>
+      <p style="color:#6c7c7c">احتفظ بهذه التفاصيل، وسنتواصل معك لتأكيد الحضور.</p>
+      <div class="summary">
+        <div><span>الورشة</span><b>${esc(bk.ws.title)}</b></div>
+        <div><span>اليوم</span><b>${fmtDay(bk.date)}</b></div>
+        <div><span>الوقت</span><b>${esc(o.timeTxt)}</b></div>
+        <div><span>الاسم</span><b>${esc(o.name)}</b></div>
+        <div><span>الحالة</span><b>${esc(o.status)}</b></div>
+        <div><span>الرسوم</span><b>${esc(o.priceTxt)}</b></div>
+      </div>
+      <a class="btn btn-gold btn-block" href="https://api.whatsapp.com/send?phone=${wa}&text=${txt}" target="_blank" rel="noopener">🟢 إرسال تأكيد عبر واتساب</a>
+      <button class="btn btn-ghost btn-block" style="margin-top:10px" onclick="closeModal()">تم</button>
+    </div>`;
+}
 
 loadWorkshops();
 </script>
