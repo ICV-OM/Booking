@@ -101,6 +101,27 @@ body{font-family:'Tajawal',sans-serif;color:var(--ink);min-height:100vh;
   border:1.6px solid var(--line);border-radius:12px;padding:11px 18px;transition:all .15s;color:var(--ink)}
 .time-btn:hover{border-color:var(--violet-500);background:var(--violet-50)}
 .time-btn.sel{background:var(--violet-600);color:#fff;border-color:var(--violet-600)}
+/* ── تقويم اختيار الموعد ── */
+.cal-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:0 8px 24px -18px rgba(30,27,52,.2)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-head .m{font-weight:900;font-size:1.1rem;color:var(--violet-900)}
+.cal-nav{border:1.6px solid var(--line);background:#fff;width:38px;height:38px;border-radius:11px;font-size:1.3rem;line-height:1;color:var(--violet-700);cursor:pointer;display:grid;place-items:center;transition:.15s}
+.cal-nav:hover:not(:disabled){border-color:var(--violet-500);color:var(--violet-600)}
+.cal-nav:disabled{opacity:.35;cursor:not-allowed}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dow{text-align:center;font-size:.74rem;font-weight:800;color:var(--muted);padding:4px 0}
+.day{aspect-ratio:1;border-radius:12px;border:1.6px solid transparent;background:#f3f1f9;color:#b4adcc;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:.95rem;position:relative;transition:.15s}
+.day.free{background:var(--violet-100);color:var(--violet-900);cursor:pointer;border-color:#d9cef5}
+.day.free:hover{background:#e3dafb;border-color:var(--violet-500)}
+.day.free .dot{width:5px;height:5px;border-radius:50%;background:var(--violet-600);margin-top:3px}
+.day.sel{background:var(--violet-600);color:#fff;border-color:var(--violet-600);box-shadow:0 6px 16px -6px rgba(109,40,217,.5)}
+.day.sel .dot{background:#fff}
+.day.empty-cell{background:transparent;border:0}
+.legend{display:flex;gap:18px;margin-top:16px;font-size:.84rem;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:5px;margin-inline-end:6px;vertical-align:-2px}
+.times-card{margin-top:16px}
+.times-card label{display:block;font-weight:900;color:var(--violet-900);margin-bottom:10px;font-size:1rem}
 
 /* نموذج البيانات */
 .form-card{background:#fff;border-radius:var(--radius);border:1px solid var(--line);padding:24px;margin-top:8px}
@@ -111,6 +132,27 @@ body{font-family:'Tajawal',sans-serif;color:var(--ink);min-height:100vh;
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--violet-500);background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.13)}
 .field textarea{min-height:80px;resize:vertical}
 .ltr{direction:ltr;text-align:right}
+/* اختيار مدمج (النوع/الحالة) */
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg label{flex:1;min-width:90px;cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg .opt{display:flex;align-items:center;justify-content:center;gap:7px;text-align:center;
+  border:1.6px solid var(--line);background:var(--violet-50);border-radius:12px;padding:12px 10px;
+  font-weight:800;font-size:.92rem;transition:all .15s}
+.seg .opt svg{width:16px;height:16px;color:var(--violet-600)}
+.seg input:checked + .opt{border-color:var(--violet-600);background:#fff;color:var(--violet-900);box-shadow:0 6px 16px -10px rgba(109,40,217,.45)}
+.seg input:checked + .opt svg{color:var(--violet-600)}
+.field select{width:100%;font-family:inherit;font-size:1rem;border:1.6px solid var(--line);
+  background:var(--violet-50);border-radius:13px;padding:13px 15px;appearance:none;cursor:pointer}
+.field select:focus{outline:none;border-color:var(--violet-500);background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.13)}
+.select-wrap2{position:relative}
+.select-wrap2::after{content:"";position:absolute;left:18px;top:50%;width:8px;height:8px;
+  border-left:2.4px solid var(--violet-600);border-bottom:2.4px solid var(--violet-600);
+  transform:translateY(-70%) rotate(-45deg);pointer-events:none}
+.disc-note{display:none;align-items:center;gap:7px;background:var(--green-bg);color:var(--green);
+  border:1px solid #bfe6cd;border-radius:10px;padding:8px 12px;margin-top:9px;font-weight:800;font-size:.84rem}
+.disc-note.show{display:flex}
+.disc-note svg{width:15px;height:15px}
 .summary-box{background:var(--violet-50);border:1.4px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}
 .summary-box div{display:flex;justify-content:space-between;padding:6px 0;font-size:.92rem;border-bottom:1px dashed var(--line)}
 .summary-box div:last-child{border-bottom:none}
@@ -158,7 +200,6 @@ body{font-family:'Tajawal',sans-serif;color:var(--ink);min-height:100vh;
     </div>
     <div class="navlinks">
       <a href="index.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> حجز ورشة</a>
-      <a href="register.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg> التسجيل في الورشة</a>
       <a href="admin.html" class="admin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> دخول المسؤول</a>
     </div>
   </nav>
@@ -185,8 +226,8 @@ body{font-family:'Tajawal',sans-serif;color:var(--ink);min-height:100vh;
   <div class="stage" id="stage2">
     <button class="back" id="back1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg> رجوع للورش</button>
     <div class="chosen-ws" id="chosenWs"></div>
-    <div class="section-title">اختر الموعد المناسب</div>
-    <div class="section-sub">الأوقات التالية متاحة للحجز</div>
+    <div class="section-title">اختر اليوم والوقت المناسب</div>
+    <div class="section-sub">الأيام المتاحة مميّزة باللون البنفسجي — اختر يومًا ثم الوقت</div>
     <div id="slotsArea"></div>
   </div>
 
@@ -201,6 +242,34 @@ body{font-family:'Tajawal',sans-serif;color:var(--ink);min-height:100vh;
       <div class="field"><label for="bName">الاسم الكامل</label><input type="text" id="bName" placeholder="اكتب اسمك الثلاثي"></div>
       <div class="field"><label for="bPhone">رقم الهاتف</label><input type="tel" id="bPhone" class="ltr" placeholder="مثال: 91312183" inputmode="tel"></div>
       <div class="field"><label for="bEmail">البريد الإلكتروني <span style="color:var(--muted);font-weight:500;font-size:.84rem">(اختياري)</span></label><input type="email" id="bEmail" class="ltr" placeholder="example@email.com" inputmode="email"></div>
+
+      <div class="field"><label>النوع</label>
+        <div class="seg" id="bGender">
+          <label><input type="radio" name="bgender" value="ذكر"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="14" r="5"/><path d="M14 10l6-6M15 4h5v5" stroke-linecap="round" stroke-linejoin="round"/></svg> ذكر</span></label>
+          <label><input type="radio" name="bgender" value="أنثى"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="5"/><path d="M12 14v7M9 18h6" stroke-linecap="round"/></svg> أنثى</span></label>
+        </div>
+      </div>
+
+      <div class="field"><label for="bGov">المحافظة</label>
+        <div class="select-wrap2">
+          <select id="bGov">
+            <option value="" selected disabled>اختر محافظتك</option>
+            <option>مسقط</option><option>ظفار</option><option>مسندم</option><option>البريمي</option>
+            <option>الداخلية</option><option>شمال الباطنة</option><option>جنوب الباطنة</option>
+            <option>شمال الشرقية</option><option>جنوب الشرقية</option><option>الظاهرة</option><option>الوسطى</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field"><label>الحالة</label>
+        <div class="seg" id="bStatus">
+          <label><input type="radio" name="bstatus" value="طالب"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg> طالب</span></label>
+          <label><input type="radio" name="bstatus" value="موظف"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> موظف</span></label>
+          <label><input type="radio" name="bstatus" value="باحث عن عمل"><span class="opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg> باحث عن عمل</span></label>
+        </div>
+        <div class="disc-note" id="discNote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> مبروك! تم تطبيق خصم ٥٠٪ على الرسوم</div>
+      </div>
+
       <div class="field"><label for="bNotes">طلبات خاصة <span style="color:var(--muted);font-weight:500;font-size:.84rem">(اختياري)</span></label><textarea id="bNotes" placeholder="أي ملاحظة تود إضافتها"></textarea></div>
       <button class="submit" id="confirmBtn">تأكيد الحجز <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M20 6 9 17l-5-5"/></svg></button>
     </div>
@@ -284,29 +353,109 @@ window.pickWs = async id=>{
   }catch(e){ $('#slotsArea').innerHTML=`<div class="empty"><h3>تعذّر تحميل المواعيد</h3></div>`; }
 };
 
+const DOW = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+let calMonth = null;       // أول يوم في الشهر المعروض
+let slotDates = new Set(); // التواريخ التي بها مواعيد متاحة
+let pickedDate = null;
+
 function renderSlots(){
-  if(!SLOTS.length){ $('#slotsArea').innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><h3>لا توجد مواعيد متاحة حاليًا</h3><p>يرجى المحاولة لاحقًا أو التواصل مع المنظّم</p></div>`; return; }
-  const byDate={};
-  SLOTS.forEach(s=>{ (byDate[s.slot_date]=byDate[s.slot_date]||[]).push(s); });
-  $('#slotsArea').innerHTML = Object.keys(byDate).sort().map(d=>`
-    <div class="day-block">
-      <div class="dh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><h4>${fmtDay(d)}</h4></div>
-      <div class="times">${byDate[d].map(s=>`<button class="time-btn" data-id="${s.id}" onclick="pickSlot('${s.id}')">${esc(s.start_time)} - ${esc(s.end_time)}</button>`).join('')}</div>
-    </div>`).join('');
+  const area=$('#slotsArea');
+  slotDates = new Set(SLOTS.map(s=>s.slot_date));
+  if(!SLOTS.length){
+    area.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><h3>لا توجد مواعيد متاحة حاليًا</h3><p>يرجى المحاولة لاحقًا أو التواصل مع المنظّم</p></div>`;
+    return;
+  }
+  // ابدأ من أقرب شهر فيه مواعيد (أو الشهر الحالي)
+  const firstSlot = [...slotDates].sort()[0];
+  const fs = new Date(firstSlot+'T00:00:00');
+  const now = new Date();
+  const startM = (fs.getFullYear()>now.getFullYear() || (fs.getFullYear()===now.getFullYear()&&fs.getMonth()>now.getMonth()))
+    ? new Date(fs.getFullYear(),fs.getMonth(),1) : new Date(now.getFullYear(),now.getMonth(),1);
+  calMonth = startM;
+  pickedDate = null;
+  area.innerHTML = `<div class="cal-card"><div id="calMount"></div></div><div id="timesMount"></div>`;
+  renderCalendar();
 }
+
+function renderCalendar(){
+  const y=calMonth.getFullYear(), m=calMonth.getMonth();
+  const startDow=new Date(y,m,1).getDay();
+  const days=new Date(y,m+1,0).getDate();
+  const monthName=calMonth.toLocaleDateString('ar',{month:'long',year:'numeric'});
+  const today=new Date(); const curM=new Date(today.getFullYear(),today.getMonth(),1);
+  const atMin = calMonth<=curM;
+  const todayStr=new Date().toISOString().slice(0,10);
+
+  let cells='';
+  for(let i=0;i<startDow;i++) cells+=`<div class="day empty-cell"></div>`;
+  for(let d=1;d<=days;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const free = slotDates.has(ds) && ds>=todayStr;
+    const sel = pickedDate===ds;
+    cells+=`<div class="day ${free?'free':''} ${sel?'sel':''}" ${free?`onclick="pickDay('${ds}')"`:''}>${d}${free?'<span class="dot"></span>':''}</div>`;
+  }
+  $('#calMount').innerHTML=`
+    <div class="cal-head">
+      <button class="cal-nav" onclick="moveMonth(-1)" ${atMin?'disabled':''}>›</button>
+      <span class="m">${monthName}</span>
+      <button class="cal-nav" onclick="moveMonth(1)">‹</button>
+    </div>
+    <div class="cal-grid">${DOW.map(d=>`<div class="dow">${d.slice(0,3)}</div>`).join('')}${cells}</div>
+    <div class="legend">
+      <span><i style="background:var(--violet-100);border:1px solid #d9cef5"></i>يوم متاح</span>
+      <span><i style="background:#f3f1f9"></i>غير متاح</span>
+    </div>`;
+}
+
+window.moveMonth = dir=>{
+  const d=new Date(calMonth); d.setMonth(d.getMonth()+dir);
+  const today=new Date(); const curM=new Date(today.getFullYear(),today.getMonth(),1);
+  if(d<curM) return;
+  calMonth=d; renderCalendar();
+};
+
+window.pickDay = ds=>{
+  pickedDate=ds; sel.slot=null;
+  renderCalendar();
+  const daySlots = SLOTS.filter(s=>s.slot_date===ds).sort((a,b)=>a.start_time<b.start_time?-1:1);
+  $('#timesMount').innerHTML=`
+    <div class="cal-card times-card">
+      <label>الأوقات المتاحة — ${fmtDay(ds)}</label>
+      <div class="times">${daySlots.map(s=>`<button class="time-btn" data-id="${s.id}" onclick="pickSlot('${s.id}')">${esc(s.start_time)} - ${esc(s.end_time)}</button>`).join('')}</div>
+    </div>`;
+  $('#timesMount').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
 
 window.pickSlot = id=>{
   sel.slot = SLOTS.find(s=>s.id===id);
   document.querySelectorAll('.time-btn').forEach(b=>b.classList.toggle('sel',b.dataset.id===id));
-  setTimeout(()=>goToForm(), 250);
+  setTimeout(()=>goToForm(), 280);
 };
+
+const DISCOUNT_STATUSES = ['طالب','باحث عن عمل'];
+function selectedStatus(){ const s=document.querySelector('input[name=bstatus]:checked'); return s?s.value:null; }
+function finalPrice(){
+  const base=Number(sel.ws.price_omr);
+  return DISCOUNT_STATUSES.includes(selectedStatus()) ? base/2 : base;
+}
+function priceText(){
+  const base=Number(sel.ws.price_omr), disc=DISCOUNT_STATUSES.includes(selectedStatus());
+  return disc ? `${base/2} ريال عماني (خصم ٥٠٪ بدل ${base})` : `${base} ريال عماني`;
+}
+function updateSummaryPrice(){
+  const row=document.getElementById('priceRow');
+  if(row) row.querySelector('span:last-child').textContent = priceText();
+  $('#discNote').classList.toggle('show', DISCOUNT_STATUSES.includes(selectedStatus()));
+}
+document.querySelectorAll('input[name=bstatus]').forEach(r=>r.addEventListener('change', updateSummaryPrice));
 
 function goToForm(){
   $('#bkSummary').innerHTML = `
     <div><span>الورشة</span><span>${esc(sel.ws.title)}</span></div>
     <div><span>اليوم</span><span>${fmtDay(sel.slot.slot_date)}</span></div>
     <div><span>الوقت</span><span>${esc(sel.slot.start_time)} - ${esc(sel.slot.end_time)}</span></div>
-    <div><span>الرسوم</span><span>${Number(sel.ws.price_omr)} ريال عماني</span></div>`;
+    <div id="priceRow"><span>الرسوم</span><span>${priceText()}</span></div>`;
+  updateSummaryPrice();
   setStep(3);
 }
 
@@ -316,21 +465,29 @@ $('#back2').addEventListener('click', ()=>setStep(2));
 /* تأكيد الحجز */
 $('#confirmBtn').addEventListener('click', async ()=>{
   const name=$('#bName').value.trim(), phone=$('#bPhone').value.trim(),
-        email=$('#bEmail').value.trim(), notes=$('#bNotes').value.trim();
+        email=$('#bEmail').value.trim(), notes=$('#bNotes').value.trim(),
+        gov=$('#bGov').value, status=selectedStatus();
+  const gender=(document.querySelector('input[name=bgender]:checked')||{}).value;
   const err=$('#formErr');
   if(!name||!phone){ err.textContent='⚠️ يرجى إدخال الاسم ورقم الهاتف'; err.classList.add('show'); return; }
   if(phone.replace(/\D/g,'').length<8){ err.textContent='⚠️ يرجى إدخال رقم هاتف صحيح'; err.classList.add('show'); return; }
+  if(!gender){ err.textContent='⚠️ يرجى اختيار النوع'; err.classList.add('show'); return; }
+  if(!gov){ err.textContent='⚠️ يرجى اختيار المحافظة'; err.classList.add('show'); return; }
+  if(!status){ err.textContent='⚠️ يرجى اختيار الحالة'; err.classList.add('show'); return; }
   err.classList.remove('show');
   const btn=$('#confirmBtn'); btn.disabled=true; btn.textContent='جارٍ تأكيد الحجز…';
   try{
     const res = await api('rpc/book_slot',{method:'POST',body:JSON.stringify({
-      p_slot_id:sel.slot.id, p_workshop_id:sel.ws.id, p_name:name, p_phone:phone, p_email:email||null, p_notes:notes||null
+      p_slot_id:sel.slot.id, p_workshop_id:sel.ws.id, p_name:name, p_phone:phone,
+      p_email:email||null, p_gender:gender, p_governorate:gov, p_status:status, p_notes:notes||null
     })});
     if(!res.ok){ err.textContent='⚠️ '+res.error; err.classList.add('show'); btn.disabled=false; btn.innerHTML='تأكيد الحجز'; return; }
 
     const dayTxt = fmtDay(sel.slot.slot_date);
     const timeTxt = `${sel.slot.start_time} - ${sel.slot.end_time}`;
-    const priceTxt = `${Number(sel.ws.price_omr)} ريال عماني`;
+    const priceTxt = res.discount
+      ? `${res.price} ريال عماني (خصم ٥٠٪ بدل ${res.base_price})`
+      : `${res.price} ريال عماني`;
 
     /* إشعار تلقائي إلى بريد المنظّم */
     fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
@@ -346,6 +503,9 @@ $('#confirmBtn').addEventListener('click', async ()=>{
         'الاسم': name,
         'رقم الهاتف': phone,
         'البريد': email || 'لا يوجد',
+        'النوع': gender,
+        'المحافظة': gov,
+        'الحالة': status,
         'الرسوم': priceTxt,
         'طلبات خاصة': notes || 'لا يوجد'
       })
@@ -356,6 +516,7 @@ $('#confirmBtn').addEventListener('click', async ()=>{
       <div><span>اليوم</span><span>${dayTxt}</span></div>
       <div><span>الوقت</span><span>${esc(timeTxt)}</span></div>
       <div><span>الاسم</span><span>${esc(name)}</span></div>
+      <div><span>الحالة</span><span>${esc(status)}</span></div>
       <div><span>الرسوم</span><span>${priceTxt}</span></div>`;
 
     /* زر تأكيد عبر واتساب */
@@ -368,6 +529,7 @@ $('#confirmBtn').addEventListener('click', async ()=>{
       `الاسم: ${name}\n` +
       `رقم الهاتف: ${phone}\n` +
       (email ? `البريد: ${email}\n` : '') +
+      `النوع: ${gender}\nالمحافظة: ${gov}\nالحالة: ${status}\n` +
       `الرسوم: ${priceTxt}` +
       (notes ? `\nطلبات خاصة: ${notes}` : '')
     );
