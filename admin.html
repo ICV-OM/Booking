@@ -4,16 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة إدارة الورش التدريبية</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
-  --violet-900:#3b0f7e;--violet-700:#5b21b6;--violet-600:#6d28d9;--violet-500:#7c3aed;
-  --violet-100:#ede9fe;--violet-50:#f5f3ff;--ink:#1e1b34;--muted:#6b6788;
-  --line:#e4e0f4;--white:#fff;--green:#128c4b;--green-bg:#e8f7ee;--red:#b3261e;--amber:#b5730e;
+  --violet-900:#0a3a3a;--violet-700:#0f4c4c;--violet-600:#13a181;--violet-500:#16b894;
+  --violet-100:#e7f6f1;--violet-50:#f4f6f5;--ink:#0c2a2a;--muted:#5b6b6b;
+  --line:#e4e9e8;--white:#fff;--green:#13a181;--green-bg:#e7f6f1;--red:#c0413b;--amber:#8a6712;
+  --gold:#c79a3b;--gold-soft:#f7efdc;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Tajawal',sans-serif;background:var(--violet-50);color:var(--ink);min-height:100vh}
+h1,h2,h3,.topbar h1{font-family:'Reem Kufi',sans-serif}
 .btn{font-family:inherit;font-weight:800;font-size:.9rem;cursor:pointer;border:none;border-radius:12px;
   padding:10px 18px;display:inline-flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .15s,background .15s}
 .btn:disabled{opacity:.6;cursor:default}
@@ -26,9 +28,9 @@ body{font-family:'Tajawal',sans-serif;background:var(--violet-50);color:var(--in
 .btn-danger{background:#fdeceb;color:var(--red)}.btn-danger:hover{background:#fbdad8}
 .btn-sm{padding:7px 13px;font-size:.82rem;border-radius:10px}
 
-.topbar{background:linear-gradient(135deg,var(--violet-900),var(--violet-600));color:#fff;
+.topbar{background:linear-gradient(180deg,var(--violet-700),var(--violet-900));color:#fff;
   padding:18px 26px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 24px -12px rgba(91,33,182,.5)}
-.topbar .logo{width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.16);display:grid;place-items:center}
+.topbar .logo{width:42px;height:42px;border-radius:13px;background:radial-gradient(circle at 30% 30%,var(--gold),#9a7320);display:grid;place-items:center;color:#1c1300;font-weight:800;font-size:20px;font-family:'Reem Kufi';box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
 .topbar .logo svg{width:24px;height:24px}
 .topbar h1{font-size:1.15rem;font-weight:900}
 .topbar p{font-size:.82rem;color:#e0d8ff;font-weight:500}
@@ -68,6 +70,21 @@ body{font-family:'Tajawal',sans-serif;background:var(--violet-50);color:var(--in
   box-shadow:0 8px 24px -16px rgba(30,27,52,.18);display:flex;flex-direction:column}
 .ws-card .img{height:150px;background:var(--violet-100);background-size:cover;background-position:center;position:relative}
 .ws-card .img .off{position:absolute;inset:0;background:rgba(30,27,52,.55);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.9rem}
+.ws-card{position:relative}
+.ws-card .img .disc-flag{position:absolute;top:10px;inset-inline-start:10px;background:var(--gold);color:#231700;font-weight:800;font-size:.78rem;padding:4px 11px;border-radius:30px;box-shadow:0 4px 12px -4px rgba(0,0,0,.3)}
+.ws-check{position:absolute;top:10px;inset-inline-end:10px;z-index:3;cursor:pointer}
+.ws-check input{position:absolute;opacity:0;width:0;height:0}
+.ws-check span{display:block;width:26px;height:26px;border-radius:8px;background:#fff;border:2px solid var(--line);box-shadow:0 2px 8px -2px rgba(0,0,0,.25);transition:.15s;position:relative}
+.ws-check input:checked + span{background:var(--green);border-color:var(--green)}
+.ws-check input:checked + span::after{content:"";position:absolute;inset:0;background:no-repeat center/14px url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>")}
+.discount-bar{background:var(--gold-soft);border:1px solid #ecdcb4;border-radius:16px;padding:16px 18px;margin-bottom:20px}
+.discount-bar .db-title{font-weight:900;color:var(--amber);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.discount-bar .db-title svg{width:19px;height:19px}
+.discount-bar .db-row{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
+.discount-bar .db-field label{display:block;font-weight:700;font-size:.82rem;margin-bottom:5px;color:var(--ink)}
+.discount-bar .db-field input{width:120px;font-family:inherit;font-size:.95rem;border:1.6px solid #e6d6ad;background:#fff;border-radius:11px;padding:10px 13px}
+.discount-bar .db-field input:focus{outline:none;border-color:var(--gold)}
+.discount-bar .db-hint{font-size:.8rem;color:#94823f;margin-top:10px;font-weight:500}
 .ws-card .img .noimg{width:100%;height:100%;display:grid;place-items:center;color:var(--violet-500)}
 .ws-card .img .noimg svg{width:40px;height:40px}
 .ws-card .body{padding:16px 18px;flex:1;display:flex;flex-direction:column}
@@ -116,6 +133,10 @@ tbody td{padding:12px 16px;border-bottom:1px solid var(--line)}
 tbody tr:hover{background:var(--violet-50)}
 tbody tr:last-child td{border-bottom:none}
 .cell-contact{direction:ltr;text-align:right;color:var(--muted);font-size:.84rem}
+.pay-toggle{font-family:inherit;font-weight:800;font-size:.8rem;cursor:pointer;border:1.4px solid #f0d9ab;
+  background:var(--gold-soft);color:var(--amber);border-radius:999px;padding:5px 13px;white-space:nowrap;transition:.15s}
+.pay-toggle:hover{filter:brightness(.97)}
+.pay-toggle.on{background:var(--green-bg);color:var(--green);border-color:#bfe6cd}
 
 /* ── نافذة منبثقة ── */
 .modal-bg{position:fixed;inset:0;background:rgba(30,27,52,.5);display:none;align-items:flex-start;justify-content:center;
@@ -184,7 +205,7 @@ tbody tr:last-child td{border-bottom:none}
 <!-- اللوحة -->
 <div id="app" class="hidden">
   <div class="topbar">
-    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
+    <div class="logo">و</div>
     <div><h1>لوحة إدارة الورش التدريبية</h1><p>المسجّلون · الورش · المواعيد · الحجوزات</p></div>
     <div class="right">
       <a class="btn btn-light" id="viewPublic" href="index.html" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> صفحة الحجز</a>
@@ -269,6 +290,8 @@ tbody tr:last-child td{border-bottom:none}
         <input type="number" id="wsPrice" min="0" step="1" placeholder="50"></div>
       <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">المدة</label>
         <input type="text" id="wsDuration" placeholder="مثال: ٣ ساعات"></div>
+      <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">خصم %</label>
+        <input type="number" id="wsDiscount" min="0" max="100" step="1" placeholder="0"></div>
     </div>
     <label class="switch" style="margin-bottom:18px"><input type="checkbox" id="wsActive" checked> الورشة مفعّلة (تظهر للمتدربين)</label>
     <div class="modal-actions">
@@ -279,6 +302,30 @@ tbody tr:last-child td{border-bottom:none}
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- نافذة تعديل الحجز -->
+<div class="modal-bg" id="bkModal">
+  <div class="modal">
+    <h3>تعديل الحجز</h3>
+    <p style="color:var(--muted);font-size:.86rem;margin:-10px 0 18px" id="ebInfo"></p>
+    <input type="hidden" id="ebId">
+    <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">الاسم</label>
+      <input type="text" id="ebName"></div>
+    <div class="frow" style="margin-bottom:16px">
+      <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">رقم الهاتف</label>
+        <input type="tel" id="ebPhone" dir="ltr" style="text-align:right"></div>
+      <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">البريد</label>
+        <input type="email" id="ebEmail" dir="ltr" style="text-align:right"></div>
+    </div>
+    <div class="field"><label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:6px">ملاحظات</label>
+      <textarea id="ebNotes"></textarea></div>
+    <label class="switch" style="margin-bottom:18px"><input type="checkbox" id="ebPaid"> تم الدفع</label>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="ebCancel">إلغاء</button>
+      <button class="btn btn-violet" id="ebSave">حفظ التعديلات</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const SUPABASE_URL = 'https://ajgtatisurcpygzernsy.supabase.co';
@@ -337,17 +384,32 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
 function renderWorkshops(){
   const a=$('#wsArea');
   if(!WS.length){ a.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><h3>لا توجد ورش بعد</h3><p>اضغط «ورشة جديدة» لإضافة أول ورشة</p></div>`; return; }
-  a.innerHTML = `<div class="ws-grid">${WS.map(w=>`
+  a.innerHTML = `
+    <div class="discount-bar">
+      <div class="db-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9h.01M15 15h.01M16 8l-8 8"/><circle cx="12" cy="12" r="10"/></svg> خصم ترويجي على الورش</div>
+      <div class="db-row">
+        <div class="db-field"><label>النسبة %</label><input type="number" id="discPercent" min="0" max="100" step="1" placeholder="مثال: 20"></div>
+        <button class="btn btn-gold btn-sm" onclick="applyDiscount(false)">طبّق على المحدّدة</button>
+        <button class="btn btn-violet btn-sm" onclick="applyDiscount(true)">طبّق على الكل</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearDiscounts()">إزالة كل الخصومات</button>
+      </div>
+      <p class="db-hint">حدّد الورش بالمربّعات ثم «طبّق على المحدّدة»، أو طبّق على الكل دفعة واحدة. الخصم يظهر للمتدرب في صفحة الحجز.</p>
+    </div>
+    <div class="ws-grid">${WS.map(w=>`
     <div class="ws-card">
+      <label class="ws-check"><input type="checkbox" class="wsSel" value="${w.id}"><span></span></label>
       <div class="img" style="${w.image_url?`background-image:url('${esc(w.image_url)}')`:''}">
         ${!w.image_url?`<div class="noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>`:''}
+        ${Number(w.discount_percent)>0?`<div class="disc-flag">خصم ${Number(w.discount_percent)}%</div>`:''}
         ${!w.is_active?'<div class="off">غير مفعّلة</div>':''}
       </div>
       <div class="body">
         <h3>${esc(w.title)}</h3>
         <p class="desc">${esc(w.description||'—')}</p>
         <div class="meta">
-          <span class="pill pill-violet">${Number(w.price_omr)} ر.ع</span>
+          ${Number(w.discount_percent)>0
+            ? `<span class="pill pill-violet"><s style="opacity:.6">${Number(w.price_omr)}</s> ${(+(w.price_omr*(1-w.discount_percent/100)).toFixed(2))} ر.ع</span>`
+            : `<span class="pill pill-violet">${Number(w.price_omr)} ر.ع</span>`}
           ${w.duration?`<span class="pill pill-gray">${esc(w.duration)}</span>`:''}
           <span class="pill ${w.is_active?'pill-green':'pill-gray'}">${w.is_active?'مفعّلة':'متوقفة'}</span>
         </div>
@@ -359,6 +421,25 @@ function renderWorkshops(){
     </div>`).join('')}</div>`;
 }
 
+window.applyDiscount = async (all)=>{
+  const pct = Number($('#discPercent').value);
+  if($('#discPercent').value==='' || pct<0 || pct>100){ toast('أدخل نسبة صحيحة بين 0 و 100', true); return; }
+  let ids = null;
+  if(!all){
+    ids = [...document.querySelectorAll('.wsSel:checked')].map(c=>c.value);
+    if(!ids.length){ toast('حدّد ورشة واحدة على الأقل', true); return; }
+  }
+  try{
+    const n = await rpc('admin_set_discount',{p_pass:PASS, p_percent:pct, p_ids:ids});
+    await loadAll(); toast(`تم تطبيق خصم ${pct}% على ${n} ورشة ✅`);
+  }catch(e){ toast('تعذّر تطبيق الخصم', true); }
+};
+window.clearDiscounts = async ()=>{
+  if(!confirm('إزالة جميع الخصومات من كل الورش؟')) return;
+  try{ await rpc('admin_set_discount',{p_pass:PASS, p_percent:0, p_ids:null}); await loadAll(); toast('تمت إزالة الخصومات'); }
+  catch(e){ toast('تعذّر التنفيذ', true); }
+};
+
 $('#addWsBtn').addEventListener('click', ()=>openWsModal(null));
 window.editWs = id=>openWsModal(WS.find(w=>w.id===id));
 function openWsModal(w){
@@ -366,6 +447,7 @@ function openWsModal(w){
   $('#wsModalTitle').textContent = w?'تعديل الورشة':'ورشة جديدة';
   $('#wsTitle').value = w?w.title:''; $('#wsDesc').value = w?(w.description||''):'';
   $('#wsPrice').value = w?w.price_omr:''; $('#wsDuration').value = w?(w.duration||''):'';
+  $('#wsDiscount').value = w?(Number(w.discount_percent)||0):0;
   $('#wsActive').checked = w?w.is_active:true; $('#wsImg').value='';
   setPreview(pendingImageUrl);
   $('#wsModal').classList.add('show');
@@ -402,11 +484,13 @@ $('#wsSave').addEventListener('click', async ()=>{
   if(!title){ toast('يرجى إدخال عنوان الورشة', true); return; }
   $('#wsSave').disabled=true; $('#wsSave').textContent='جارٍ الحفظ…';
   try{
-    await rpc('admin_save_workshop',{
+    const wid = await rpc('admin_save_workshop',{
       p_pass:PASS, p_id:editingId, p_title:title, p_desc:$('#wsDesc').value.trim(),
       p_price:Number($('#wsPrice').value)||0, p_duration:$('#wsDuration').value.trim(),
       p_image:pendingImageUrl, p_active:$('#wsActive').checked
     });
+    const disc=Math.max(0,Math.min(100,Number($('#wsDiscount').value)||0));
+    await rpc('admin_set_discount',{p_pass:PASS, p_percent:disc, p_ids:[wid]});
     $('#wsModal').classList.remove('show'); await loadAll(); toast('تم حفظ الورشة ✅');
   }catch(e){ toast('تعذّر الحفظ', true); }
   finally{ $('#wsSave').disabled=false; $('#wsSave').textContent='حفظ الورشة'; }
@@ -462,29 +546,72 @@ window.delSlot = async id=>{
 function renderBookings(){
   const a=$('#bookArea');
   if(!BOOKINGS.length){ a.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><h3>لا توجد حجوزات بعد</h3><p>ستظهر هنا حجوزات المتدربين</p></div>`; return; }
-  a.innerHTML=`<div class="tablecard"><div class="tablescroll"><table>
-    <thead><tr><th>#</th><th>المتدرب</th><th>الهاتف</th><th>البريد</th><th>الورشة</th><th>اليوم</th><th>الوقت</th><th>الطلبات</th></tr></thead>
+  const paidCount = BOOKINGS.filter(b=>b.paid).length;
+  a.innerHTML=`
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+      <span class="pill pill-green" style="padding:6px 14px">مدفوع: ${paidCount}</span>
+      <span class="pill pill-amber" style="padding:6px 14px">غير مدفوع: ${BOOKINGS.length-paidCount}</span>
+    </div>
+    <div class="tablecard"><div class="tablescroll"><table>
+    <thead><tr><th>#</th><th>المتدرب</th><th>الهاتف</th><th>الورشة</th><th>اليوم</th><th>الوقت</th><th>الرسوم</th><th>الدفع</th><th>إجراءات</th></tr></thead>
     <tbody>${BOOKINGS.map((b,i)=>`<tr>
       <td style="color:var(--muted)">${i+1}</td>
-      <td style="font-weight:800">${esc(b.trainee_name)}</td>
+      <td style="font-weight:800">${esc(b.trainee_name)}<div style="color:var(--muted);font-size:.78rem;font-weight:500">${esc(b.gender||'')} · ${esc(b.governorate||'')} · ${esc(b.status||'')}</div></td>
       <td class="cell-contact">${esc(b.trainee_phone)}</td>
-      <td class="cell-contact">${esc(b.trainee_email||'—')}</td>
       <td>${esc(b.workshop_title||'—')}</td>
       <td style="white-space:nowrap">${b.slot_date?fmtDay(b.slot_date):'—'}</td>
       <td style="white-space:nowrap">${esc(b.slot_time||'—')}</td>
-      <td style="color:var(--muted);font-size:.84rem;max-width:180px">${esc(b.notes||'—')}</td>
+      <td style="white-space:nowrap"><b>${b.price_omr!=null?Number(b.price_omr)+' ر.ع':'—'}</b>${b.discount_applied?' <span class="pill pill-green" style="font-size:.7rem">خصم</span>':''}</td>
+      <td><button class="pay-toggle ${b.paid?'on':''}" onclick="togglePaid('${b.id}',${!b.paid})">${b.paid?'✓ مدفوع':'غير مدفوع'}</button></td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="editBk('${b.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></button>
+        <button class="btn btn-danger btn-sm" onclick="delBk('${b.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>
+      </td>
     </tr>`).join('')}</tbody></table></div></div>`;
 }
+
+window.togglePaid = async (id,paid)=>{
+  try{ await rpc('admin_set_paid',{p_pass:PASS,p_id:id,p_paid:paid}); await loadAll(); toast(paid?'تم وضع علامة مدفوع ✅':'تم وضع علامة غير مدفوع'); }
+  catch(e){ toast('تعذّر التحديث', true); }
+};
+window.delBk = async id=>{
+  if(!confirm('حذف هذا الحجز؟ سيُعاد فتح الموعد للحجز.')) return;
+  try{ await rpc('admin_delete_booking',{p_pass:PASS,p_id:id}); await loadAll(); toast('تم حذف الحجز'); }
+  catch(e){ toast('تعذّر الحذف', true); }
+};
+window.editBk = id=>{
+  const b=BOOKINGS.find(x=>x.id===id); if(!b) return;
+  $('#ebId').value=b.id; $('#ebName').value=b.trainee_name||''; $('#ebPhone').value=b.trainee_phone||'';
+  $('#ebEmail').value=b.trainee_email||''; $('#ebNotes').value=b.notes||''; $('#ebPaid').checked=!!b.paid;
+  $('#ebInfo').textContent=`${b.workshop_title||''} · ${b.slot_date?fmtDay(b.slot_date):''} · ${b.slot_time||''}`;
+  $('#bkModal').classList.add('show');
+};
+$('#ebCancel').addEventListener('click', ()=>$('#bkModal').classList.remove('show'));
+$('#bkModal').addEventListener('click', e=>{ if(e.target.id==='bkModal') $('#bkModal').classList.remove('show'); });
+$('#ebSave').addEventListener('click', async ()=>{
+  const name=$('#ebName').value.trim(), phone=$('#ebPhone').value.trim();
+  if(!name||!phone){ toast('الاسم والهاتف مطلوبان', true); return; }
+  $('#ebSave').disabled=true; $('#ebSave').textContent='جارٍ الحفظ…';
+  try{
+    await rpc('admin_update_booking',{p_pass:PASS,p_id:$('#ebId').value,p_name:name,p_phone:phone,
+      p_email:$('#ebEmail').value.trim()||null,p_notes:$('#ebNotes').value.trim()||null,p_paid:$('#ebPaid').checked});
+    $('#bkModal').classList.remove('show'); await loadAll(); toast('تم تحديث الحجز ✅');
+  }catch(e){ toast('تعذّر الحفظ', true); }
+  finally{ $('#ebSave').disabled=false; $('#ebSave').textContent='حفظ التعديلات'; }
+});
 
 $('#exportBookBtn').addEventListener('click', ()=>{
   if(!BOOKINGS.length){ toast('لا توجد حجوزات للتصدير', true); return; }
   const data = BOOKINGS.map((b,i)=>({
     '#':i+1,'المتدرب':b.trainee_name,'رقم الهاتف':b.trainee_phone,'البريد':b.trainee_email||'',
+    'النوع':b.gender||'','المحافظة':b.governorate||'','الحالة':b.status||'',
     'الورشة':b.workshop_title||'','اليوم':b.slot_date||'','الوقت':b.slot_time||'',
+    'الرسوم (ر.ع)':b.price_omr!=null?Number(b.price_omr):'','خصم':b.discount_applied?'نعم':'لا',
+    'الدفع':b.paid?'مدفوع':'غير مدفوع',
     'الطلبات':b.notes||'','تاريخ الحجز':new Date(b.created_at).toLocaleString('ar')
   }));
   const ws=XLSX.utils.json_to_sheet(data);
-  ws['!cols']=[{wch:5},{wch:22},{wch:15},{wch:24},{wch:24},{wch:14},{wch:16},{wch:24},{wch:20}];
+  ws['!cols']=[{wch:5},{wch:22},{wch:15},{wch:24},{wch:8},{wch:14},{wch:12},{wch:24},{wch:14},{wch:16},{wch:11},{wch:7},{wch:11},{wch:24},{wch:20}];
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'الحجوزات');
   XLSX.writeFile(wb,`حجوزات_${new Date().toISOString().slice(0,10)}.xlsx`);
 });
