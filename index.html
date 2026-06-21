@@ -257,12 +257,14 @@ function renderPublic(){
 /* ===================== نافذة الحجز ===================== */
 window.openBooking = async wid=>{
   const w=WORKSHOPS.find(x=>x.id===wid); if(!w) return;
-  bk={ ws:w, month:new Date(new Date().getFullYear(),new Date().getMonth(),1), date:null, slotId:null };
+  bk={ ws:w, month:new Date(new Date().getFullYear(),new Date().getMonth(),1), date:null, start:null, end:null };
   openModal(`
     <div class="modal-head"><h3>حجز: ${esc(w.title)}</h3><button class="x" onclick="closeModal()">×</button></div>
     <div class="modal-body" id="bkBody"><div class="loading"><div class="spin"></div>جارٍ تحميل المواعيد…</div></div>`);
   try{
-    SLOTS = await api(`availability_slots?select=*&status=eq.available&slot_date=gte.${todayStr()}&order=slot_date,start_time`);
+    const from=todayStr();
+    const to=(()=>{ const d=new Date(); d.setDate(d.getDate()+90); return d.toISOString().slice(0,10); })();
+    SLOTS = await api('rpc/get_availability',{method:'POST',body:JSON.stringify({p_from:from,p_to:to})});
     // ابدأ من أقرب شهر فيه مواعيد
     if(SLOTS.length){
       const fs=new Date(SLOTS[0].slot_date+'T00:00:00'); const now=new Date();
@@ -318,20 +320,20 @@ window.moveMonth = dir=>{
   const d=new Date(bk.month); d.setMonth(d.getMonth()+dir);
   const minM=new Date(new Date().getFullYear(),new Date().getMonth(),1);
   if(d<minM) return;
-  bk.month=d; bk.date=null; bk.slotId=null;
+  bk.month=d; bk.date=null; bk.start=null; bk.end=null;
   renderCalendar(); $('#slotMount').innerHTML=''; $('#formMount').innerHTML='';
 };
 window.pickDay = ds=>{
-  bk.date=ds; bk.slotId=null;
+  bk.date=ds; bk.start=null; bk.end=null;
   renderCalendar();
   const daySlots=SLOTS.filter(s=>s.slot_date===ds).sort((a,b)=>a.start_time<b.start_time?-1:1);
   $('#slotMount').innerHTML=`
     <label style="display:block;font-weight:700;color:var(--teal-700);margin-bottom:8px">الأوقات المتاحة — ${fmtDay(ds)}</label>
-    <div class="slots">${daySlots.map(s=>`<button class="slot" data-id="${s.id}" onclick="pickSlot('${s.id}',this)">${esc(s.start_time)} - ${esc(s.end_time)}</button>`).join('')}</div>`;
+    <div class="slots">${daySlots.map(s=>`<button class="slot" onclick="pickSlot('${s.start_time}','${s.end_time}',this)">${esc(s.start_time)} - ${esc(s.end_time)}</button>`).join('')}</div>`;
   $('#formMount').innerHTML='';
 };
-window.pickSlot = (sid,el)=>{
-  bk.slotId=sid;
+window.pickSlot = (st,en,el)=>{
+  bk.start=st; bk.end=en;
   document.querySelectorAll('#slotMount .slot').forEach(s=>s.classList.remove('sel'));
   el.classList.add('sel');
   renderForm();
@@ -386,14 +388,16 @@ async function confirmBooking(){
   err.classList.remove('show');
   const btn=event.target; btn.disabled=true; btn.textContent='جارٍ تأكيد الحجز…';
   try{
-    const res=await api('rpc/book_slot',{method:'POST',body:JSON.stringify({
-      p_slot_id:bk.slotId, p_workshop_id:bk.ws.id, p_name:name, p_phone:phone, p_email:email||null,
-      p_gender:gender, p_governorate:gov, p_status:status, p_notes:note||null
+    const res=await api('rpc/book_time',{method:'POST',body:JSON.stringify({
+      p_workshop_id:bk.ws.id, p_name:name, p_phone:phone, p_email:email||null,
+      p_gender:gender, p_governorate:gov, p_status:status, p_notes:note||null,
+      p_date:bk.date, p_start:bk.start, p_end:bk.end
     })});
     if(!res.ok){ fail(res.error); btn.disabled=false; btn.textContent='تأكيد الحجز'; return; }
-    const slot=SLOTS.find(s=>s.id===bk.slotId);
-    const timeTxt=`${slot.start_time} - ${slot.end_time}`;
-    const priceTxt=res.discount?`${res.price} ر.ع (خصم ٥٠٪ بدل ${res.base_price})`:`${res.price} ر.ع`;
+    const timeTxt=`${bk.start} - ${bk.end}`;
+    const priceTxt=(res.promo>0||res.status_discount)
+      ? `${res.price} ر.ع (بدل ${res.base_price})`
+      : `${res.price} ر.ع`;
 
     /* إشعار تلقائي إلى بريد المنظّم */
     fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`,{method:'POST',
